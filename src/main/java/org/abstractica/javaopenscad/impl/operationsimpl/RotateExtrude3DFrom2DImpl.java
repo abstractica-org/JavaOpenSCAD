@@ -1,7 +1,7 @@
 package org.abstractica.javaopenscad.impl.operationsimpl;
 
-import org.abstractica.javaopenscad.impl.AGeometry3DFrom2D;
-import org.abstractica.javaopenscad.impl.ArgumentCollector;
+import org.abstractica.javaopenscad.impl.core.AGeometry3DFrom2D;
+import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
 import org.abstractica.code.codebuilder.CodeBuilder;
 
 public class RotateExtrude3DFrom2DImpl extends AGeometry3DFrom2D

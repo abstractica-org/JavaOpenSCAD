@@ -1,4 +1,4 @@
-package org.abstractica.javaopenscad.impl;
+package org.abstractica.javaopenscad.impl.core;
 
 import org.abstractica.javaopenscad.intf.Geometry2D;
 

@@ -1,4 +1,4 @@
-package org.abstractica.javaopenscad.impl;
+package org.abstractica.javaopenscad.impl.core;
 
 public interface HasArguments
 {

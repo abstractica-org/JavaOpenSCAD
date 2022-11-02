@@ -5,7 +5,7 @@ import org.abstractica.javaopenscad.impl.JavaOpenSCADImpl;
 import org.abstractica.javaopenscad.impl.operationsimpl.identifier.AllStrings;
 
 import org.abstractica.javaopenscad.intf.Geometry2D;
-import org.abstractica.javaopenscad.intf.JavaOpenSCAD;
+import org.abstractica.javaopenscad.JavaOpenSCAD;
 import org.abstractica.javaopenscad.intf.text.TextAlignment;
 import org.abstractica.javaopenscad.intf.text.TextAttributes;
 import org.abstractica.javaopenscad.intf.text.TextFont;

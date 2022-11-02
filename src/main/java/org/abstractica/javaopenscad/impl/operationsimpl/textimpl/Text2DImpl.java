@@ -1,8 +1,8 @@
 package org.abstractica.javaopenscad.impl.operationsimpl.textimpl;
 
 import org.abstractica.javaopenscad.intf.text.TextAlignment;
-import org.abstractica.javaopenscad.impl.AGeometry2D;
-import org.abstractica.javaopenscad.impl.ArgumentCollector;
+import org.abstractica.javaopenscad.impl.core.AGeometry2D;
+import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
 import org.abstractica.code.codebuilder.CodeBuilder;
 
 public class Text2DImpl extends AGeometry2D

@@ -1,7 +1,7 @@
 package org.abstractica.javaopenscad.impl.operationsimpl;
 
-import org.abstractica.javaopenscad.impl.AGeometry2DFrom3D;
-import org.abstractica.javaopenscad.impl.ArgumentCollector;
+import org.abstractica.javaopenscad.impl.core.AGeometry2DFrom3D;
+import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
 import org.abstractica.code.codebuilder.CodeBuilder;
 
 public class Projection2DFrom3DImpl extends AGeometry2DFrom3D

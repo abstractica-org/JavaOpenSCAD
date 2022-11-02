@@ -4,8 +4,8 @@ import org.abstractica.javaopenscad.intf.text.TextAlignment;
 import org.abstractica.javaopenscad.intf.text.TextAttributes;
 import org.abstractica.javaopenscad.intf.text.TextFont;
 import org.abstractica.javaopenscad.intf.text.TextSize;
-import org.abstractica.javaopenscad.impl.ArgumentCollector;
-import org.abstractica.javaopenscad.impl.HasArguments;
+import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
+import org.abstractica.javaopenscad.impl.core.HasArguments;
 
 public class TextAttributesImpl implements TextAttributes, HasArguments
 {

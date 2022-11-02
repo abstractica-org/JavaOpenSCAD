@@ -5,7 +5,7 @@ import org.abstractica.javaopenscad.impl.operationsimpl.identifier.AllStrings;
 import org.abstractica.javaopenscad.intf.Geometry2D;
 import org.abstractica.javaopenscad.intf.Geometry2DFrom2D;
 import org.abstractica.javaopenscad.intf.Geometry3D;
-import org.abstractica.javaopenscad.intf.JavaOpenSCAD;
+import org.abstractica.javaopenscad.JavaOpenSCAD;
 import org.abstractica.javaopenscad.intf.polygon.Polygon2D;
 import org.abstractica.javaopenscad.intf.polygon.Vector2D;
 

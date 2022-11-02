@@ -1,7 +1,7 @@
 package org.abstractica.javaopenscad.impl.generator;
 
-import org.abstractica.javaopenscad.impl.AGeometry;
-import org.abstractica.javaopenscad.impl.AModule;
+import org.abstractica.javaopenscad.impl.core.AGeometry;
+import org.abstractica.javaopenscad.impl.core.AModule;
 import org.abstractica.code.codebuilder.CodeBuilder;
 
 import java.util.HashMap;

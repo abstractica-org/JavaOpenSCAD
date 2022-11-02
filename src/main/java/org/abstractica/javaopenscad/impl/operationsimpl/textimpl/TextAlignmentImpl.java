@@ -1,8 +1,8 @@
 package org.abstractica.javaopenscad.impl.operationsimpl.textimpl;
 
 import org.abstractica.javaopenscad.intf.text.TextAlignment;
-import org.abstractica.javaopenscad.impl.ArgumentCollector;
-import org.abstractica.javaopenscad.impl.HasArguments;
+import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
+import org.abstractica.javaopenscad.impl.core.HasArguments;
 
 public class TextAlignmentImpl implements TextAlignment, HasArguments
 {

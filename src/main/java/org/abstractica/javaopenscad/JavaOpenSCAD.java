@@ -1,5 +1,6 @@
-package org.abstractica.javaopenscad.intf;
+package org.abstractica.javaopenscad;
 
+import org.abstractica.javaopenscad.intf.*;
 import org.abstractica.javaopenscad.intf.polygon.Path;
 import org.abstractica.javaopenscad.intf.polygon.Polygon2D;
 import org.abstractica.javaopenscad.intf.polygon.Vector2D;

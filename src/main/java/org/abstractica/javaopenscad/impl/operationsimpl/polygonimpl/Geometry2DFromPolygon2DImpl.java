@@ -3,8 +3,8 @@ package org.abstractica.javaopenscad.impl.operationsimpl.polygonimpl;
 import org.abstractica.javaopenscad.intf.polygon.Path;
 import org.abstractica.javaopenscad.intf.polygon.Polygon2D;
 import org.abstractica.javaopenscad.intf.polygon.Vector2D;
-import org.abstractica.javaopenscad.impl.AGeometry2D;
-import org.abstractica.javaopenscad.impl.ArgumentCollector;
+import org.abstractica.javaopenscad.impl.core.AGeometry2D;
+import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
 import org.abstractica.code.codebuilder.CodeBuilder;
 
 import java.util.List;
