@@ -24,12 +24,12 @@
         <dependency>
             <groupId>com.github.abstractica-org</groupId>
             <artifactId>CmdLine</artifactId>
-            <version>1.0.0</version>
+            <version>main-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.github.abstractica-org</groupId>
             <artifactId>CodeBuilder</artifactId>
-            <version>1.0.0</version>
+            <version>main-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
