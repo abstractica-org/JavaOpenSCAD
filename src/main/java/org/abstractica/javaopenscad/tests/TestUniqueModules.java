@@ -1,7 +1,7 @@
 package org.abstractica.javaopenscad.tests;
 
 import org.abstractica.javaopenscad.impl.JavaOpenSCADImpl;
-import org.abstractica.javaopenscad.impl.operationsimpl.identifier.AllStrings;
+import org.abstractica.javaopenscad.impl.core.identifier.AllStrings;
 import org.abstractica.javaopenscad.intf.Geometry2D;
 import org.abstractica.javaopenscad.intf.Geometry2DFrom2D;
 import org.abstractica.javaopenscad.JavaOpenSCAD;

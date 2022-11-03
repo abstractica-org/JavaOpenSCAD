@@ -10,7 +10,7 @@ import org.abstractica.javaopenscad.impl.core.AGeometry;
 import org.abstractica.javaopenscad.impl.core.AModule;
 import org.abstractica.javaopenscad.impl.core.Module2DImpl;
 import org.abstractica.javaopenscad.impl.core.Module3DImpl;
-import org.abstractica.javaopenscad.impl.operationsimpl.identifier.Identifier;
+import org.abstractica.javaopenscad.impl.core.identifier.Identifier;
 import org.abstractica.javaopenscad.intf.*;
 import org.abstractica.javaopenscad.intf.polygon.Path;
 import org.abstractica.javaopenscad.intf.polygon.Polygon2D;

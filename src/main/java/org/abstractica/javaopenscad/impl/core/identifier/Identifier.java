@@ -1,4 +1,4 @@
-package org.abstractica.javaopenscad.impl.operationsimpl.identifier;
+package org.abstractica.javaopenscad.impl.core.identifier;
 
 import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
 import org.abstractica.javaopenscad.impl.core.HasArguments;

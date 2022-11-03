@@ -1,4 +1,4 @@
-package org.abstractica.javaopenscad.impl.operationsimpl.identifier;
+package org.abstractica.javaopenscad.impl.core.identifier;
 
 import java.util.*;
 
@@ -21,6 +21,11 @@ public class AllStrings
 	public static boolean exists(String str)
 	{
 		return allStrings.containsKey(str);
+	}
+
+	public static void writeToFile(String fileName)
+	{
+		//ToDo: implements this
 	}
 
 
