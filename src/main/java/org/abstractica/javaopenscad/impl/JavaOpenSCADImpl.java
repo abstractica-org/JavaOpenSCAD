@@ -212,7 +212,7 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	@Override
 	public Geometry3D polyhedron3DGeometry(Polyhedron3D polyhedron)
 	{
-		return new Geometry3DFromPolyhedron3DImpl(polyhedron);
+		return module(new Geometry3DFromPolyhedron3DImpl(polyhedron));
 	}
 
 	@Override
