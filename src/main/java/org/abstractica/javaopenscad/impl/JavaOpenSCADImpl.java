@@ -369,8 +369,7 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 		String exportFormat = "--export-format ";
 		exportFormat += binarySTL ? "binstl " : "asciistl ";
 		String cmd = "openscad " + exportFormat + " -o " + prefix + ".stl " + prefix +".scad";
-		boolean succes = CmdLine.runCommand(cmd);
-		if(!succes) throw new RuntimeException("Could not generate: " + prefix + ".stl");
+		CmdLine.runCommand(cmd);
 	}
 
 	private int getId(Geometry geometry)
