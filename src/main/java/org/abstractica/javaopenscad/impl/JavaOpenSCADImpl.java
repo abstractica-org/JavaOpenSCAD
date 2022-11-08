@@ -11,10 +11,13 @@ import org.abstractica.javaopenscad.impl.core.AModule;
 import org.abstractica.javaopenscad.impl.core.Module2DImpl;
 import org.abstractica.javaopenscad.impl.core.Module3DImpl;
 import org.abstractica.javaopenscad.impl.core.identifier.Identifier;
+import org.abstractica.javaopenscad.impl.operationsimpl.polyhedronimpl.Geometry3DFromPolyhedron3DImpl;
+import org.abstractica.javaopenscad.impl.operationsimpl.polyhedronimpl.Polyhedron3DImpl;
+import org.abstractica.javaopenscad.impl.operationsimpl.polyhedronimpl.Vector3DImpl;
 import org.abstractica.javaopenscad.intf.*;
-import org.abstractica.javaopenscad.intf.polygon.Path;
-import org.abstractica.javaopenscad.intf.polygon.Polygon2D;
-import org.abstractica.javaopenscad.intf.polygon.Vector2D;
+import org.abstractica.javaopenscad.intf.Path;
+import org.abstractica.javaopenscad.intf.Polygon2D;
+import org.abstractica.javaopenscad.intf.Vector2D;
 import org.abstractica.javaopenscad.intf.text.TextAlignment;
 import org.abstractica.javaopenscad.intf.text.TextAttributes;
 import org.abstractica.javaopenscad.intf.text.TextFont;
@@ -63,21 +66,21 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	}
 
 	@Override
-	public Polygon2D polygon2D(Iterable<Vector2D> vertices)
+	public Polygon2D polygon2D(Iterable<Vector2D> vertices, int convexity)
 	{
-		return new Polygon2DImpl(vertices, null);
+		return new Polygon2DImpl(vertices, null, convexity);
 	}
 
 	@Override
-	public Polygon2D polygon2D(Iterable<Vector2D> vertices, Iterable<Path> paths)
+	public Polygon2D polygon2D(Iterable<Vector2D> vertices, Iterable<Path> paths, int convexity)
 	{
-		return new Polygon2DImpl(vertices, paths);
+		return new Polygon2DImpl(vertices, paths, convexity);
 	}
 
 	@Override
 	public Geometry2D polygon2DGeometry(Polygon2D polygon)
 	{
-		return new Geometry2DFromPolygon2DImpl(polygon);
+		return module(new Geometry2DFromPolygon2DImpl(polygon));
 	}
 
 	@Override
@@ -192,6 +195,24 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	public Geometry2D text(String text, TextAttributes attributes, int angularResolution)
 	{
 		return new Text2DImpl(text, (TextAttributesImpl) attributes, angularResolution);
+	}
+
+	@Override
+	public Vector3D vector3D(double x, double y, double z)
+	{
+		return new Vector3DImpl(x, y, z);
+	}
+
+	@Override
+	public Polyhedron3D polyhedron3D(Iterable<Vector3D> vertices, Iterable<Path> faces, int convexity)
+	{
+		return new Polyhedron3DImpl(vertices, faces, convexity);
+	}
+
+	@Override
+	public Geometry3D polyhedron3DGeometry(Polyhedron3D polyhedron)
+	{
+		return new Geometry3DFromPolyhedron3DImpl(polyhedron);
 	}
 
 	@Override

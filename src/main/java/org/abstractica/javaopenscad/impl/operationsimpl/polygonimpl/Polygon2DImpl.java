@@ -1,8 +1,8 @@
 package org.abstractica.javaopenscad.impl.operationsimpl.polygonimpl;
 
-import org.abstractica.javaopenscad.intf.polygon.Path;
-import org.abstractica.javaopenscad.intf.polygon.Polygon2D;
-import org.abstractica.javaopenscad.intf.polygon.Vector2D;
+import org.abstractica.javaopenscad.intf.Path;
+import org.abstractica.javaopenscad.intf.Polygon2D;
+import org.abstractica.javaopenscad.intf.Vector2D;
 import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
 import org.abstractica.javaopenscad.impl.core.HasArguments;
 
@@ -14,9 +14,11 @@ public class Polygon2DImpl implements Polygon2D, HasArguments
 {
 	private final List<Vector2D> vertices;
 	private final List<Path> paths;
+	private final int convexity;
 
-	public Polygon2DImpl(Iterable<Vector2D> vertices, Iterable<Path> paths)
+	public Polygon2DImpl(Iterable<Vector2D> vertices, Iterable<Path> paths, int convexity)
 	{
+		this.convexity = convexity;
 		List<Vector2D> tmpVertices = new ArrayList<>();
 		for(Vector2D v : vertices)
 		{
@@ -57,6 +59,12 @@ public class Polygon2DImpl implements Polygon2D, HasArguments
 	public List<Path> paths()
 	{
 		return paths;
+	}
+
+	@Override
+	public int convexity()
+	{
+		return convexity;
 	}
 
 	@Override

@@ -1,9 +1,9 @@
 package org.abstractica.javaopenscad;
 
 import org.abstractica.javaopenscad.intf.*;
-import org.abstractica.javaopenscad.intf.polygon.Path;
-import org.abstractica.javaopenscad.intf.polygon.Polygon2D;
-import org.abstractica.javaopenscad.intf.polygon.Vector2D;
+import org.abstractica.javaopenscad.intf.Path;
+import org.abstractica.javaopenscad.intf.Polygon2D;
+import org.abstractica.javaopenscad.intf.Vector2D;
 import org.abstractica.javaopenscad.intf.text.TextAlignment;
 import org.abstractica.javaopenscad.intf.text.TextAlignment.Direction;
 import org.abstractica.javaopenscad.intf.text.TextAlignment.Horizontal;
@@ -17,15 +17,19 @@ import java.io.IOException;
 public interface JavaOpenSCAD
 {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// 2D operations
+	// Vector2D
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//Polygons
 	Vector2D vector2D(double x, double y);
+
+	//Polygons
 	Path path(Iterable<Integer> path);
-	Polygon2D polygon2D(Iterable<Vector2D> vertices);
-	Polygon2D polygon2D(Iterable<Vector2D> vertices, Iterable<Path> paths);
+	Polygon2D polygon2D(Iterable<Vector2D> vertices, int convexity);
+	Polygon2D polygon2D(Iterable<Vector2D> vertices, Iterable<Path> paths, int convexity);
 	Geometry2D polygon2DGeometry(Polygon2D polygon);
 
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 2D operations
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Construction
 	Geometry2DFrom2D translate2D(double x, double y);
 	Geometry2DFrom2D rotate2D(double deg);
@@ -48,6 +52,17 @@ public interface JavaOpenSCAD
 	TextAlignment textAlignment(Direction direction, Horizontal horizontal, Vertical vertical);
 	TextAttributes textAttributes(TextFont font, TextSize size, TextAlignment alignment);
 	Geometry2D text(String text, TextAttributes attributes, int angularResolution);
+
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Vector3D
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	Vector3D vector3D(double x, double y, double z);
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Polyhedron3D
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	Polyhedron3D polyhedron3D(Iterable<Vector3D> vertices, Iterable<Path> faces, int convexity);
+	Geometry3D polyhedron3DGeometry(Polyhedron3D polyhedron);
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 3D to 2D operations

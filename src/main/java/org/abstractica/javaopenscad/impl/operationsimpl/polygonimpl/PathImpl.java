@@ -1,6 +1,6 @@
 package org.abstractica.javaopenscad.impl.operationsimpl.polygonimpl;
 
-import org.abstractica.javaopenscad.intf.polygon.Path;
+import org.abstractica.javaopenscad.intf.Path;
 import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
 import org.abstractica.javaopenscad.impl.core.HasArguments;
 
