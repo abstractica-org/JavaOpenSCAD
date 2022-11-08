@@ -15,6 +15,14 @@
 
     <repositories>
         <repository>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </releases>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
