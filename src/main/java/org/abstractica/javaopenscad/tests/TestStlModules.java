@@ -17,9 +17,7 @@ public class TestStlModules
 {
 	public static void main(String[] args) throws IOException
 	{
-		String moduleDirectoryName = System.getProperty("user.dir")
-				.replace("\\", "/")+ "/OpenSCAD/Modules";
-		JavaOpenSCAD os = new JavaOpenSCADImpl(moduleDirectoryName, false);
+		JavaOpenSCAD os = new JavaOpenSCADImpl();
 		List<Vector2D> vertices1 = new ArrayList<>();
 		vertices1.add(os.vector2D(1,-1));
 		vertices1.add(os.vector2D(1,1));

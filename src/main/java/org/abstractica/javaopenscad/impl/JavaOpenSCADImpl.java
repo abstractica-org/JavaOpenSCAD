@@ -65,7 +65,7 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 
 	public JavaOpenSCADImpl()
 	{
-		this(null, false);
+		this(System.getProperty("user.dir") + "/OpenSCAD/ModuleCache", true);
 	}
 
 	@Override
