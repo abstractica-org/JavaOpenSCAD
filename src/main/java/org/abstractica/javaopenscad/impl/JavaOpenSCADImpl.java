@@ -44,18 +44,22 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 
 	public JavaOpenSCADImpl(String moduleDirectoryName, boolean binarySTL)
 	{
-		this.moduleDirectoryName = moduleDirectoryName;
+
 		this.binarySTL = binarySTL;
 		this.uniqueModules = new HashMap<>();
 		if(moduleDirectoryName != null)
 		{
-			moduleDirectoryName = moduleDirectoryName.replace("\\", "/");
+			this.moduleDirectoryName = moduleDirectoryName.replace("\\", "/");
 			String allStringsFileName = moduleDirectoryName + "/AllStrings/AllStrings.txt";
 			java.nio.file.Path path = Paths.get(allStringsFileName);
 			if(Files.exists(path))
 			{
 				AllStrings.readFromFile(allStringsFileName);
 			}
+		}
+		else
+		{
+			this.moduleDirectoryName = null;
 		}
 	}
 
