@@ -42,14 +42,18 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	private final boolean binarySTL;
 	private final Map<Integer, AGeometry> uniqueModules;
 
-	public JavaOpenSCADImpl(String moduleDirectoryName, boolean binarySTL)
+	public JavaOpenSCADImpl(boolean useCache, boolean binarySTL)
 	{
-
 		this.binarySTL = binarySTL;
 		this.uniqueModules = new HashMap<>();
-		if(moduleDirectoryName != null)
+		if(!useCache)
 		{
-			this.moduleDirectoryName = moduleDirectoryName.replace("\\", "/");
+			this.moduleDirectoryName = null;
+		}
+		else
+		{
+			this.moduleDirectoryName = System.getProperty("user.dir").replace("\\", "/") +
+								"/OpenSCAD/ModuleCache";
 			String allStringsFileName = moduleDirectoryName + "/AllStrings/AllStrings.txt";
 			java.nio.file.Path path = Paths.get(allStringsFileName);
 			if(Files.exists(path))
@@ -57,15 +61,11 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 				AllStrings.readFromFile(allStringsFileName);
 			}
 		}
-		else
-		{
-			this.moduleDirectoryName = null;
-		}
 	}
 
-	public JavaOpenSCADImpl()
+	public JavaOpenSCADImpl(boolean useCache)
 	{
-		this(System.getProperty("user.dir") + "/OpenSCAD/ModuleCache", true);
+		this(useCache, true);
 	}
 
 	@Override

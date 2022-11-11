@@ -19,7 +19,7 @@ public class TestText2D
 {
 	public static void main(String[] args) throws IOException
 	{
-		JavaOpenSCAD os = new JavaOpenSCADImpl();
+		JavaOpenSCAD os = new JavaOpenSCADImpl(true);
 		TextFont font = os.textFont("Consolas", "Regular","en", "latin");
 		TextSize size = os.textSize(10/0.7, 1);
 		TextAlignment alignment = os.textAlignment(TextAlignment.Direction.LEFT_TO_RIGHT,

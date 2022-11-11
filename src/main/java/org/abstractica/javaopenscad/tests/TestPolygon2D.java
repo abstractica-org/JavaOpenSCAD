@@ -13,9 +13,7 @@ public class TestPolygon2D
 {
 	public static void main(String[] args) throws IOException
 	{
-		String moduleDirectoryName = System.getProperty("user.dir")
-				.replace("\\", "/")+ "/OpenSCAD/Modules";
-		JavaOpenSCAD os = new JavaOpenSCADImpl(moduleDirectoryName, false);
+		JavaOpenSCAD os = new JavaOpenSCADImpl(true);
 		List<Vector2D> vertices = new ArrayList<>();
 		vertices.add(os.vector2D(1,-1));
 		vertices.add(os.vector2D(1,1));
