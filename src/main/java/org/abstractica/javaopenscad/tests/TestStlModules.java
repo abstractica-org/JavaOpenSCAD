@@ -22,7 +22,7 @@ public class TestStlModules
 		JavaOpenSCAD os = new JavaOpenSCADImpl(moduleDirectoryName, false);
 		List<Vector2D> vertices1 = new ArrayList<>();
 		vertices1.add(os.vector2D(1,-1));
-		vertices1.add(os.vector2D(1,2));
+		vertices1.add(os.vector2D(1,1));
 		vertices1.add(os.vector2D(-1,1));
 		vertices1.add(os.vector2D(-1,-1));
 		Polygon2D polygon1 = os.polygon2D(vertices1, 1);

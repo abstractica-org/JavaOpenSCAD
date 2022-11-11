@@ -10,6 +10,7 @@ import org.abstractica.javaopenscad.impl.core.AGeometry;
 import org.abstractica.javaopenscad.impl.core.AModule;
 import org.abstractica.javaopenscad.impl.core.Module2DImpl;
 import org.abstractica.javaopenscad.impl.core.Module3DImpl;
+import org.abstractica.javaopenscad.impl.core.identifier.AllStrings;
 import org.abstractica.javaopenscad.impl.core.identifier.Identifier;
 import org.abstractica.javaopenscad.impl.operationsimpl.polyhedronimpl.Geometry3DFromPolyhedron3DImpl;
 import org.abstractica.javaopenscad.impl.operationsimpl.polyhedronimpl.Polyhedron3DImpl;
@@ -46,6 +47,15 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 		this.moduleDirectoryName = moduleDirectoryName;
 		this.binarySTL = binarySTL;
 		this.uniqueModules = new HashMap<>();
+		if(moduleDirectoryName != null)
+		{
+			String allStringsFileName = moduleDirectoryName + "/AllStrings/AllStrings.txt";
+			java.nio.file.Path path = Paths.get(allStringsFileName);
+			if(Files.exists(path))
+			{
+				AllStrings.readFromFile(allStringsFileName);
+			}
+		}
 	}
 
 	public JavaOpenSCADImpl()
@@ -353,6 +363,11 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 		{
 			throw new RuntimeException("Could not create OpenSCAD file: " + fileName, e);
 		}
+		if(moduleDirectoryName != null)
+		{
+			String allStringsFileName = moduleDirectoryName + "/AllStrings/AllStrings.txt";
+			AllStrings.writeToFile(allStringsFileName);
+		}
 	}
 
 	@Override
@@ -365,11 +380,15 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	public void saveSTL(String name, Geometry3D geometry)
 	{
 		String prefix = moduleDirectoryName + "/" + name;
-		generateOpenSCADFile(prefix +".scad", geometry);
-		String exportFormat = "--export-format ";
-		exportFormat += binarySTL ? "binstl " : "asciistl ";
-		String cmd = "openscad " + exportFormat + " -o " + prefix + ".stl " + prefix +".scad";
-		CmdLine.runCommand(cmd);
+		String scadFile = prefix+".scad";
+		if(!Files.exists(Paths.get(scadFile)))
+		{
+			generateOpenSCADFile(prefix + ".scad", geometry);
+			String exportFormat = "--export-format ";
+			exportFormat += binarySTL ? "binstl " : "asciistl ";
+			String cmd = "openscad " + exportFormat + " -o " + prefix + ".stl " + prefix + ".scad";
+			CmdLine.runCommand(cmd);
+		}
 	}
 
 	private int getId(Geometry geometry)

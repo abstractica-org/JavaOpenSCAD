@@ -16,7 +16,7 @@ public class TestUniqueModules
 {
 	public static void main(String[] args) throws IOException
 	{
-		JavaOpenSCAD os = new JavaOpenSCADImpl();
+		JavaOpenSCAD os = new JavaOpenSCADImpl(System.getProperty("user.dir") + "/OpenSCAD/Modules", true);
 		List<Vector2D> vertices1 = new ArrayList<>();
 		vertices1.add(os.vector2D(1,-1));
 		vertices1.add(os.vector2D(1,2));
