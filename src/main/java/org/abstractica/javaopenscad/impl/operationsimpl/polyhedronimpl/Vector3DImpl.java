@@ -40,5 +40,6 @@ public class Vector3DImpl implements Vector3D, HasArguments
 	{
 		collector.add(x);
 		collector.add(y);
+		collector.add(z);
 	}
 }
