@@ -1,13 +1,13 @@
 package org.abstractica.javaopenscad.impl.operationsimpl.textimpl;
 
-import org.abstractica.javaopenscad.intf.text.TextAlignment;
-import org.abstractica.javaopenscad.intf.text.TextAttributes;
-import org.abstractica.javaopenscad.intf.text.TextFont;
-import org.abstractica.javaopenscad.intf.text.TextSize;
+import org.abstractica.javaopenscad.intf.text.OpenSCADTextAlignment;
+import org.abstractica.javaopenscad.intf.text.OpenSCADTextAttributes;
+import org.abstractica.javaopenscad.intf.text.OpenSCADTextFont;
+import org.abstractica.javaopenscad.intf.text.OpenSCADTextSize;
 import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
 import org.abstractica.javaopenscad.impl.core.HasArguments;
 
-public class TextAttributesImpl implements TextAttributes, HasArguments
+public class TextAttributesImpl implements OpenSCADTextAttributes, HasArguments
 {
 	private final TextFontImpl font;
 	private final TextSizeImpl size;
@@ -21,19 +21,19 @@ public class TextAttributesImpl implements TextAttributes, HasArguments
 	}
 
 	@Override
-	public TextFont font()
+	public OpenSCADTextFont font()
 	{
 		return font;
 	}
 
 	@Override
-	public TextSize size()
+	public OpenSCADTextSize size()
 	{
 		return size;
 	}
 
 	@Override
-	public TextAlignment alignment()
+	public OpenSCADTextAlignment alignment()
 	{
 		return alignment;
 	}

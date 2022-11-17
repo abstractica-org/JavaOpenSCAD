@@ -1,6 +1,6 @@
 package org.abstractica.javaopenscad.intf;
 
-public interface Vector3D
+public interface OpenSCADVector3D
 {
 	double x();
 	double y();

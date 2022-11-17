@@ -1,8 +1,8 @@
 package org.abstractica.javaopenscad.impl.operationsimpl.polygonimpl;
 
-import org.abstractica.javaopenscad.intf.Path;
-import org.abstractica.javaopenscad.intf.Polygon2D;
-import org.abstractica.javaopenscad.intf.Vector2D;
+import org.abstractica.javaopenscad.intf.OpenSCADPath;
+import org.abstractica.javaopenscad.intf.OpenSCADPolygon2D;
+import org.abstractica.javaopenscad.intf.OpenSCADVector2D;
 import org.abstractica.javaopenscad.impl.core.AGeometry2D;
 import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
 import org.abstractica.code.codebuilder.CodeBuilder;
@@ -13,7 +13,7 @@ public class Geometry2DFromPolygon2DImpl extends AGeometry2D
 {
 	private final Polygon2DImpl polygon;
 
-	public Geometry2DFromPolygon2DImpl(Polygon2D polygon)
+	public Geometry2DFromPolygon2DImpl(OpenSCADPolygon2D polygon)
 	{
 		this.polygon = (Polygon2DImpl) polygon;
 	}
@@ -21,8 +21,8 @@ public class Geometry2DFromPolygon2DImpl extends AGeometry2D
 	@Override
 	public void getCallHeader(CodeBuilder cb)
 	{
-		List<Vector2D> vertices = polygon.vertices();
-		List<Path> paths = polygon.paths();
+		List<OpenSCADVector2D> vertices = polygon.vertices();
+		List<OpenSCADPath> paths = polygon.paths();
 		//Vertices
 		cb.println("polygon");
 		cb.println("(");
@@ -34,7 +34,7 @@ public class Geometry2DFromPolygon2DImpl extends AGeometry2D
 		//-->>
 		for(int i = 0; i < vertices.size(); ++i)
 		{
-			Vector2D v = vertices.get(i);
+			OpenSCADVector2D v = vertices.get(i);
 			if(i > 0)
 			{
 				cb.print(", ");
@@ -59,7 +59,7 @@ public class Geometry2DFromPolygon2DImpl extends AGeometry2D
 			cb.indent();
 			//-->>
 			boolean first2 = true;
-			for(Path path : paths)
+			for(OpenSCADPath path : paths)
 			{
 				if(first2)
 				{

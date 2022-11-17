@@ -1,10 +1,10 @@
 package org.abstractica.javaopenscad.impl.operationsimpl.textimpl;
 
-import org.abstractica.javaopenscad.intf.text.TextFont;
+import org.abstractica.javaopenscad.intf.text.OpenSCADTextFont;
 import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
 import org.abstractica.javaopenscad.impl.core.HasArguments;
 
-public class TextFontImpl implements TextFont, HasArguments
+public class TextFontImpl implements OpenSCADTextFont, HasArguments
 {
 	private final String fontName;
 	private final String fontStyle;

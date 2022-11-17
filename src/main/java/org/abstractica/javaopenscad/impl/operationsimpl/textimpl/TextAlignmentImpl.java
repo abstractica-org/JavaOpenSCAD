@@ -1,10 +1,10 @@
 package org.abstractica.javaopenscad.impl.operationsimpl.textimpl;
 
-import org.abstractica.javaopenscad.intf.text.TextAlignment;
+import org.abstractica.javaopenscad.intf.text.OpenSCADTextAlignment;
 import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
 import org.abstractica.javaopenscad.impl.core.HasArguments;
 
-public class TextAlignmentImpl implements TextAlignment, HasArguments
+public class TextAlignmentImpl implements OpenSCADTextAlignment, HasArguments
 {
 	private final Direction direction;
 	private final Horizontal horizontal;

@@ -1,14 +1,14 @@
 package org.abstractica.javaopenscad.impl.core;
 
-import org.abstractica.javaopenscad.intf.Geometry2D;
-import org.abstractica.javaopenscad.intf.Geometry3DFrom2D;
+import org.abstractica.javaopenscad.intf.OpenSCADGeometry2D;
+import org.abstractica.javaopenscad.intf.OpenSCADGeometry3DFrom2D;
 
-public abstract class AGeometry3DFrom2D extends AGeometryNode implements Geometry3DFrom2D
+public abstract class AGeometry3DFrom2D extends AGeometryNode implements OpenSCADGeometry3DFrom2D
 {
 	protected AGeometry3DFrom2D() {}
 
 	@Override
-	public Geometry3DFrom2D add(Geometry2D child)
+	public OpenSCADGeometry3DFrom2D add(OpenSCADGeometry2D child)
 	{
 		addChild((AGeometry) child);
 		return this;

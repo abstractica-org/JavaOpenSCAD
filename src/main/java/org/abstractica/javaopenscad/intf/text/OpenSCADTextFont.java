@@ -1,6 +1,6 @@
 package org.abstractica.javaopenscad.intf.text;
 
-public interface TextFont
+public interface OpenSCADTextFont
 {
 	String fontName();
 	String fontStyle();

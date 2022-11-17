@@ -3,26 +3,25 @@ package org.abstractica.javaopenscad.impl.operationsimpl.polyhedronimpl;
 import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
 import org.abstractica.javaopenscad.impl.core.HasArguments;
 import org.abstractica.javaopenscad.impl.operationsimpl.polygonimpl.PathImpl;
-import org.abstractica.javaopenscad.impl.operationsimpl.polygonimpl.Vector2DImpl;
-import org.abstractica.javaopenscad.intf.Polyhedron3D;
-import org.abstractica.javaopenscad.intf.Vector3D;
-import org.abstractica.javaopenscad.intf.Path;
+import org.abstractica.javaopenscad.intf.OpenSCADPolyhedron3D;
+import org.abstractica.javaopenscad.intf.OpenSCADVector3D;
+import org.abstractica.javaopenscad.intf.OpenSCADPath;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Polyhedron3DImpl implements Polyhedron3D, HasArguments
+public class Polyhedron3DImpl implements OpenSCADPolyhedron3D, HasArguments
 {
-	private final List<Vector3D> vertices;
-	private final List<Path> faces;
+	private final List<OpenSCADVector3D> vertices;
+	private final List<OpenSCADPath> faces;
 	private final int convexity;
 
-	public Polyhedron3DImpl(Iterable<Vector3D> vertices, Iterable<Path> faces, int convexity)
+	public Polyhedron3DImpl(Iterable<OpenSCADVector3D> vertices, Iterable<OpenSCADPath> faces, int convexity)
 	{
 		this.convexity = convexity;
-		List<Vector3D> tmpVertices = new ArrayList<>();
-		for(Vector3D v : vertices)
+		List<OpenSCADVector3D> tmpVertices = new ArrayList<>();
+		for(OpenSCADVector3D v : vertices)
 		{
 			if(!(v instanceof Vector3DImpl))
 			{
@@ -32,8 +31,8 @@ public class Polyhedron3DImpl implements Polyhedron3D, HasArguments
 		}
 		this.vertices = Collections.unmodifiableList(tmpVertices);
 
-		List<Path> tmpPaths = new ArrayList<>();
-		for (Path path : faces)
+		List<OpenSCADPath> tmpPaths = new ArrayList<>();
+		for (OpenSCADPath path : faces)
 		{
 			if (!(path instanceof PathImpl))
 			{
@@ -45,13 +44,13 @@ public class Polyhedron3DImpl implements Polyhedron3D, HasArguments
 	}
 
 	@Override
-	public List<Vector3D> vertices()
+	public List<OpenSCADVector3D> vertices()
 	{
 		return vertices;
 	}
 
 	@Override
-	public List<Path> faces()
+	public List<OpenSCADPath> faces()
 	{
 		return faces;
 	}
@@ -65,12 +64,12 @@ public class Polyhedron3DImpl implements Polyhedron3D, HasArguments
 	@Override
 	public void collectArguments(ArgumentCollector collector)
 	{
-		for(Vector3D v: vertices)
+		for(OpenSCADVector3D v: vertices)
 		{
 			collector.add((Vector3DImpl) v);
 		}
 
-		for (Path face : faces)
+		for (OpenSCADPath face : faces)
 		{
 			collector.add((PathImpl) face);
 		}

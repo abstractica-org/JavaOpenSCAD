@@ -11,7 +11,7 @@ public class Geometry3DFromPolyhedron3DImpl extends AGeometry3D
 {
 	private final Polyhedron3DImpl polyhedron;
 
-	public Geometry3DFromPolyhedron3DImpl(Polyhedron3D polyhedron)
+	public Geometry3DFromPolyhedron3DImpl(OpenSCADPolyhedron3D polyhedron)
 	{
 		this.polyhedron = (Polyhedron3DImpl) polyhedron;
 	}
@@ -19,8 +19,8 @@ public class Geometry3DFromPolyhedron3DImpl extends AGeometry3D
 	@Override
 	public void getCallHeader(CodeBuilder cb)
 	{
-		List<Vector3D> vertices = polyhedron.vertices();
-		List<Path> paths = polyhedron.faces();
+		List<OpenSCADVector3D> vertices = polyhedron.vertices();
+		List<OpenSCADPath> paths = polyhedron.faces();
 		//Vertices
 		cb.println("polyhedron");
 		cb.println("(");
@@ -33,7 +33,7 @@ public class Geometry3DFromPolyhedron3DImpl extends AGeometry3D
 		// -->
 		for(int i = 0; i < vertices.size(); ++i)
 		{
-			Vector3D v = vertices.get(i);
+			OpenSCADVector3D v = vertices.get(i);
 			if(i > 0)
 			{
 				cb.print(", ");
@@ -59,7 +59,7 @@ public class Geometry3DFromPolyhedron3DImpl extends AGeometry3D
 		cb.indent();
 		// -->
 		boolean first2 = true;
-		for(Path path : paths)
+		for(OpenSCADPath path : paths)
 		{
 			if(first2)
 			{

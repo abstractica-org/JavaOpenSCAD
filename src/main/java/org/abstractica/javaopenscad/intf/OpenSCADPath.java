@@ -1,6 +1,6 @@
 package org.abstractica.javaopenscad.intf;
 
-public interface Path
+public interface OpenSCADPath
 {
 	Iterable<Integer> indexes();
 }

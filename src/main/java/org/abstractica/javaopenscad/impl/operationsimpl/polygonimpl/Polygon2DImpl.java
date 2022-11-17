@@ -1,8 +1,8 @@
 package org.abstractica.javaopenscad.impl.operationsimpl.polygonimpl;
 
-import org.abstractica.javaopenscad.intf.Path;
-import org.abstractica.javaopenscad.intf.Polygon2D;
-import org.abstractica.javaopenscad.intf.Vector2D;
+import org.abstractica.javaopenscad.intf.OpenSCADPath;
+import org.abstractica.javaopenscad.intf.OpenSCADPolygon2D;
+import org.abstractica.javaopenscad.intf.OpenSCADVector2D;
 import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
 import org.abstractica.javaopenscad.impl.core.HasArguments;
 
@@ -10,17 +10,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Polygon2DImpl implements Polygon2D, HasArguments
+public class Polygon2DImpl implements OpenSCADPolygon2D, HasArguments
 {
-	private final List<Vector2D> vertices;
-	private final List<Path> paths;
+	private final List<OpenSCADVector2D> vertices;
+	private final List<OpenSCADPath> paths;
 	private final int convexity;
 
-	public Polygon2DImpl(Iterable<Vector2D> vertices, Iterable<Path> paths, int convexity)
+	public Polygon2DImpl(Iterable<OpenSCADVector2D> vertices, Iterable<OpenSCADPath> paths, int convexity)
 	{
 		this.convexity = convexity;
-		List<Vector2D> tmpVertices = new ArrayList<>();
-		for(Vector2D v : vertices)
+		List<OpenSCADVector2D> tmpVertices = new ArrayList<>();
+		for(OpenSCADVector2D v : vertices)
 		{
 			if(!(v instanceof Vector2DImpl))
 			{
@@ -36,8 +36,8 @@ public class Polygon2DImpl implements Polygon2D, HasArguments
 		}
 		else
 		{
-			List<Path> tmpPaths = new ArrayList<>();
-			for (Path path : paths)
+			List<OpenSCADPath> tmpPaths = new ArrayList<>();
+			for (OpenSCADPath path : paths)
 			{
 				if (!(path instanceof PathImpl))
 				{
@@ -50,13 +50,13 @@ public class Polygon2DImpl implements Polygon2D, HasArguments
 	}
 
 	@Override
-	public List<Vector2D> vertices()
+	public List<OpenSCADVector2D> vertices()
 	{
 		return vertices;
 	}
 
 	@Override
-	public List<Path> paths()
+	public List<OpenSCADPath> paths()
 	{
 		return paths;
 	}
@@ -70,13 +70,13 @@ public class Polygon2DImpl implements Polygon2D, HasArguments
 	@Override
 	public void collectArguments(ArgumentCollector collector)
 	{
-		for(Vector2D v: vertices)
+		for(OpenSCADVector2D v: vertices)
 		{
 			collector.add((Vector2DImpl) v);
 		}
 		if(paths != null)
 		{
-			for (Path path : paths)
+			for (OpenSCADPath path : paths)
 			{
 				collector.add((PathImpl) path);
 			}

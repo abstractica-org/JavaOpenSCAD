@@ -1,6 +1,6 @@
 package org.abstractica.javaopenscad.intf.text;
 
-public interface TextSize
+public interface OpenSCADTextSize
 {
 	double size();
 	double spacing();

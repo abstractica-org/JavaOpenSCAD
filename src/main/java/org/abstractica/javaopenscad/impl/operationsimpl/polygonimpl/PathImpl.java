@@ -1,6 +1,6 @@
 package org.abstractica.javaopenscad.impl.operationsimpl.polygonimpl;
 
-import org.abstractica.javaopenscad.intf.Path;
+import org.abstractica.javaopenscad.intf.OpenSCADPath;
 import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
 import org.abstractica.javaopenscad.impl.core.HasArguments;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class PathImpl implements Path, HasArguments
+public class PathImpl implements OpenSCADPath, HasArguments
 {
 	private final List<Integer> indexes;
 

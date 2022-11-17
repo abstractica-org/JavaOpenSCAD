@@ -1,10 +1,10 @@
 package org.abstractica.javaopenscad.impl.operationsimpl.polygonimpl;
 
-import org.abstractica.javaopenscad.intf.Vector2D;
+import org.abstractica.javaopenscad.intf.OpenSCADVector2D;
 import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
 import org.abstractica.javaopenscad.impl.core.HasArguments;
 
-public class Vector2DImpl implements Vector2D, HasArguments
+public class Vector2DImpl implements OpenSCADVector2D, HasArguments
 {
 	private final double x;
 	private final double y;

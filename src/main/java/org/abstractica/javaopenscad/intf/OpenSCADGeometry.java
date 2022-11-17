@@ -1,6 +1,6 @@
 package org.abstractica.javaopenscad.intf;
 
-public interface Geometry
+public interface OpenSCADGeometry
 {
 	void debugMark();
 	void disable();

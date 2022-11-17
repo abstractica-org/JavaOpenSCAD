@@ -14,20 +14,20 @@ public class TestPolygon2D
 	public static void main(String[] args) throws IOException
 	{
 		JavaOpenSCAD os = new JavaOpenSCADImpl(true);
-		List<Vector2D> vertices = new ArrayList<>();
+		List<OpenSCADVector2D> vertices = new ArrayList<>();
 		vertices.add(os.vector2D(1,-1));
 		vertices.add(os.vector2D(1,1));
 		vertices.add(os.vector2D(-1,1));
 		vertices.add(os.vector2D(-1,-1));
-		List<Path> paths = new ArrayList<>();
+		List<OpenSCADPath> paths = new ArrayList<>();
 		List<Integer> path1 = new ArrayList<>();
 		path1.add(0);
 		path1.add(1);
 		path1.add(2);
 		path1.add(3);
 		paths.add(os.path(path1));
-		Polygon2D polygon = os.polygon2D(vertices, paths, 1);
-		Geometry2D geometry = os.polygon2DGeometry(polygon);
+		OpenSCADPolygon2D polygon = os.polygon2D(vertices, paths, 1);
+		OpenSCADGeometry2D geometry = os.polygon2DGeometry(polygon);
 		os.generateOpenSCADFile("OpenSCAD/output.scad", geometry);
 		System.out.println(AllStrings.listAllStrings());
 	}
