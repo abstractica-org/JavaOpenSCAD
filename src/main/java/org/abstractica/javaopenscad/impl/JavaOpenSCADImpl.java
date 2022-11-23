@@ -1,39 +1,34 @@
 package org.abstractica.javaopenscad.impl;
 
+
 import org.abstractica.cmdline.CmdLine;
 import org.abstractica.code.codebuilder.CodeBuilder;
 import org.abstractica.code.codebuilder.impl.CodeBuilderImpl;
 import org.abstractica.code.codebuilder.textoutput.TextOutput;
 import org.abstractica.code.codebuilder.textoutput.impl.StringBuilderTextOutput;
-import org.abstractica.javaopenscad.JavaOpenSCAD;
 import org.abstractica.javaopenscad.impl.core.AGeometry;
 import org.abstractica.javaopenscad.impl.core.AModule;
 import org.abstractica.javaopenscad.impl.core.Module2DImpl;
 import org.abstractica.javaopenscad.impl.core.Module3DImpl;
 import org.abstractica.javaopenscad.impl.core.identifier.AllStrings;
 import org.abstractica.javaopenscad.impl.core.identifier.Identifier;
-import org.abstractica.javaopenscad.impl.operationsimpl.polyhedronimpl.Geometry3DFromPolyhedron3DImpl;
-import org.abstractica.javaopenscad.impl.operationsimpl.polyhedronimpl.Polyhedron3DImpl;
-import org.abstractica.javaopenscad.impl.operationsimpl.polyhedronimpl.Vector3DImpl;
+
+import org.abstractica.javaopenscad.JavaOpenSCAD;
 import org.abstractica.javaopenscad.intf.*;
-import org.abstractica.javaopenscad.intf.OpenSCADPath;
-import org.abstractica.javaopenscad.intf.OpenSCADPolygon2D;
-import org.abstractica.javaopenscad.intf.OpenSCADVector2D;
+
 import org.abstractica.javaopenscad.intf.text.OpenSCADTextAlignment;
 import org.abstractica.javaopenscad.intf.text.OpenSCADTextAttributes;
 import org.abstractica.javaopenscad.intf.text.OpenSCADTextFont;
 import org.abstractica.javaopenscad.intf.text.OpenSCADTextSize;
 import org.abstractica.javaopenscad.impl.operationsimpl.*;
-import org.abstractica.javaopenscad.impl.operationsimpl.polygonimpl.Geometry2DFromPolygon2DImpl;
-import org.abstractica.javaopenscad.impl.operationsimpl.polygonimpl.PathImpl;
-import org.abstractica.javaopenscad.impl.operationsimpl.polygonimpl.Polygon2DImpl;
-import org.abstractica.javaopenscad.impl.operationsimpl.polygonimpl.Vector2DImpl;
+
 import org.abstractica.javaopenscad.impl.operationsimpl.textimpl.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class JavaOpenSCADImpl implements JavaOpenSCAD
@@ -68,34 +63,17 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 		this(useCache, true);
 	}
 
+
 	@Override
-	public OpenSCADVector2D vector2D(double x, double y)
+	public OpenSCADGeometry2D polygon2D(List<Double> vertices)
 	{
-		return new Vector2DImpl(x, y);
+		return new Polygon2DImpl(vertices);
 	}
 
 	@Override
-	public OpenSCADPath path(Iterable<Integer> path)
+	public OpenSCADGeometry2D polygon2D(List<Double> vertices, List<List<Integer>> paths)
 	{
-		return new PathImpl(path);
-	}
-
-	@Override
-	public OpenSCADPolygon2D polygon2D(Iterable<OpenSCADVector2D> vertices, int convexity)
-	{
-		return new Polygon2DImpl(vertices, null, convexity);
-	}
-
-	@Override
-	public OpenSCADPolygon2D polygon2D(Iterable<OpenSCADVector2D> vertices, Iterable<OpenSCADPath> paths, int convexity)
-	{
-		return new Polygon2DImpl(vertices, paths, convexity);
-	}
-
-	@Override
-	public OpenSCADGeometry2D polygon2DGeometry(OpenSCADPolygon2D polygon)
-	{
-		return module(new Geometry2DFromPolygon2DImpl(polygon));
+		return new Polygon2DImpl(vertices, paths);
 	}
 
 	@Override
@@ -213,21 +191,9 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	}
 
 	@Override
-	public OpenSCADVector3D vector3D(double x, double y, double z)
+	public OpenSCADGeometry3D polyhedron3D(List<Double> vertices, List<List<Integer>> faces)
 	{
-		return new Vector3DImpl(x, y, z);
-	}
-
-	@Override
-	public OpenSCADPolyhedron3D polyhedron3D(Iterable<OpenSCADVector3D> vertices, Iterable<OpenSCADPath> faces, int convexity)
-	{
-		return new Polyhedron3DImpl(vertices, faces, convexity);
-	}
-
-	@Override
-	public OpenSCADGeometry3D polyhedron3DGeometry(OpenSCADPolyhedron3D polyhedron)
-	{
-		return module(new Geometry3DFromPolyhedron3DImpl(polyhedron));
+		return new Polyhedron3DImpl(vertices, faces);
 	}
 
 	@Override

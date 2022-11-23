@@ -1,9 +1,6 @@
 package org.abstractica.javaopenscad;
 
 import org.abstractica.javaopenscad.intf.*;
-import org.abstractica.javaopenscad.intf.OpenSCADPath;
-import org.abstractica.javaopenscad.intf.OpenSCADPolygon2D;
-import org.abstractica.javaopenscad.intf.OpenSCADVector2D;
 import org.abstractica.javaopenscad.intf.text.OpenSCADTextAlignment;
 import org.abstractica.javaopenscad.intf.text.OpenSCADTextAlignment.Direction;
 import org.abstractica.javaopenscad.intf.text.OpenSCADTextAlignment.Horizontal;
@@ -13,19 +10,13 @@ import org.abstractica.javaopenscad.intf.text.OpenSCADTextFont;
 import org.abstractica.javaopenscad.intf.text.OpenSCADTextSize;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface JavaOpenSCAD
 {
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Vector2D
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////
-	OpenSCADVector2D vector2D(double x, double y);
-
 	//Polygons
-	OpenSCADPath path(Iterable<Integer> path);
-	OpenSCADPolygon2D polygon2D(Iterable<OpenSCADVector2D> vertices, int convexity);
-	OpenSCADPolygon2D polygon2D(Iterable<OpenSCADVector2D> vertices, Iterable<OpenSCADPath> paths, int convexity);
-	OpenSCADGeometry2D polygon2DGeometry(OpenSCADPolygon2D polygon);
+	OpenSCADGeometry2D polygon2D(List<Double> vertices);
+	OpenSCADGeometry2D polygon2D(List<Double> vertices, List<List<Integer>> paths);
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 2D operations
@@ -53,17 +44,10 @@ public interface JavaOpenSCAD
 	OpenSCADTextAttributes textAttributes(OpenSCADTextFont font, OpenSCADTextSize size, OpenSCADTextAlignment alignment);
 	OpenSCADGeometry2D text(String text, OpenSCADTextAttributes attributes, int angularResolution);
 
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Vector3D
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////
-	OpenSCADVector3D vector3D(double x, double y, double z);
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Polyhedron3D
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
-	OpenSCADPolyhedron3D polyhedron3D(Iterable<OpenSCADVector3D> vertices, Iterable<OpenSCADPath> faces, int convexity);
-	OpenSCADGeometry3D polyhedron3DGeometry(OpenSCADPolyhedron3D polyhedron);
-
+	OpenSCADGeometry3D polyhedron3D(List<Double> vertices, List<List<Integer>> faces);
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 3D to 2D operations
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
