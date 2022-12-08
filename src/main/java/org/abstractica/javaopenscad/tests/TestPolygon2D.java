@@ -14,11 +14,11 @@ public class TestPolygon2D
 	public static void main(String[] args) throws IOException
 	{
 		JavaOpenSCAD os = new JavaOpenSCADImpl(true);
-		List<Double> vertices = new ArrayList<>();
-		vertices.add(1.0); vertices.add(-1.0);
-		vertices.add(1.0); vertices.add(1.0);
-		vertices.add(-1.0); vertices.add(1.0);
-		vertices.add(-1.0); vertices.add(-1.0);
+		List<OpenSCADVector2D> vertices = new ArrayList<>();
+		vertices.add(os.vector2D(1.0, -1.0));
+		vertices.add(os.vector2D(1.0, 2.0));
+		vertices.add(os.vector2D(-1.0, 1.0));
+		vertices.add(os.vector2D(-1.0, -1.0));
 		OpenSCADGeometry2D geometry = os.polygon2D(vertices);
 		os.generateOpenSCADFile("OpenSCAD/output.scad", geometry);
 		System.out.println(AllStrings.listAllStrings());

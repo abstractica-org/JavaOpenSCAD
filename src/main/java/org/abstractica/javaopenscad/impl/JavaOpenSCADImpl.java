@@ -6,10 +6,7 @@ import org.abstractica.code.codebuilder.CodeBuilder;
 import org.abstractica.code.codebuilder.impl.CodeBuilderImpl;
 import org.abstractica.code.codebuilder.textoutput.TextOutput;
 import org.abstractica.code.codebuilder.textoutput.impl.StringBuilderTextOutput;
-import org.abstractica.javaopenscad.impl.core.AGeometry;
-import org.abstractica.javaopenscad.impl.core.AModule;
-import org.abstractica.javaopenscad.impl.core.Module2DImpl;
-import org.abstractica.javaopenscad.impl.core.Module3DImpl;
+import org.abstractica.javaopenscad.impl.core.*;
 import org.abstractica.javaopenscad.impl.core.identifier.AllStrings;
 import org.abstractica.javaopenscad.impl.core.identifier.Identifier;
 
@@ -27,6 +24,7 @@ import org.abstractica.javaopenscad.impl.operationsimpl.textimpl.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,17 +61,51 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 		this(useCache, true);
 	}
 
-
 	@Override
-	public OpenSCADGeometry2D polygon2D(List<Double> vertices)
+	public OpenSCADVector2D vector2D(double x, double y)
 	{
-		return new Polygon2DImpl(vertices);
+		return new OpenSCADVector2DImpl(x, y);
 	}
 
 	@Override
-	public OpenSCADGeometry2D polygon2D(List<Double> vertices, List<List<Integer>> paths)
+	public OpenSCADGeometry2D polygon2D(Iterable<OpenSCADVector2D> vertices)
 	{
-		return new Polygon2DImpl(vertices, paths);
+		ArrayList<OpenSCADVector2D> vertexList = new ArrayList<>();
+		ArrayList<Integer> path = new ArrayList<>();
+		for(OpenSCADVector2D vertex : vertices)
+		{
+			path.add(vertexList.size());
+			vertexList.add(vertex);
+		}
+		path.trimToSize();
+		vertexList.trimToSize();
+		List<List<Integer>> paths = new ArrayList<>(1);
+		paths.add(path);
+		return new Polygon2DImpl(vertexList, paths);
+	}
+
+	@Override
+	public OpenSCADGeometry2D polygon2D(Iterable<OpenSCADVector2D> vertices, Iterable<? extends Iterable<Integer>> paths)
+	{
+		ArrayList<OpenSCADVector2D> vertexList = new ArrayList<>();
+		for(OpenSCADVector2D vertex : vertices)
+		{
+			vertexList.add(vertex);
+		}
+		vertexList.trimToSize();
+		ArrayList<List<Integer>> pathListList = new ArrayList<>();
+		for(Iterable<Integer> path : paths)
+		{
+			ArrayList<Integer> pathList = new ArrayList<>();
+			for(Integer i : path)
+			{
+				pathList.add(i);
+			}
+			pathList.trimToSize();
+			pathListList.add(pathList);
+		}
+		pathListList.trimToSize();
+		return new Polygon2DImpl(vertexList, pathListList);
 	}
 
 	@Override
@@ -85,7 +117,7 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	@Override
 	public OpenSCADGeometry2DFrom2D rotate2D(double deg)
 	{
-		return new RotateAndProject2DImpl(0,0, deg);
+		return new Rotate2DImpl(deg);
 	}
 
 	@Override
@@ -191,9 +223,39 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	}
 
 	@Override
-	public OpenSCADGeometry3D polyhedron3D(List<Double> vertices, List<List<Integer>> faces)
+	public OpenSCADVector3D vector3D(double x, double y, double z)
 	{
-		return new Polyhedron3DImpl(vertices, faces);
+		return new OpenSCADVector3DImpl(x, y, z);
+	}
+
+	@Override
+	public OpenSCADGeometry3DFrom3D multMatrix3D(double m00, double m01, double m02, double m03, double m10, double m11, double m12, double m13, double m20, double m21, double m22, double m23)
+	{
+		return new MultMatrix3DImpl(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23);
+	}
+
+	@Override
+	public OpenSCADGeometry3D polyhedron3D(Iterable<OpenSCADVector3D> vertices, Iterable<? extends Iterable<Integer>> faces)
+	{
+		ArrayList<OpenSCADVector3D> vertexList = new ArrayList<>();
+		for(OpenSCADVector3D vertex : vertices)
+		{
+			vertexList.add(vertex);
+		}
+		vertexList.trimToSize();
+		ArrayList<List<Integer>> faceListList = new ArrayList<>();
+		for(Iterable<Integer> face : faces)
+		{
+			ArrayList<Integer> faceList = new ArrayList<>();
+			for(Integer i : face)
+			{
+				faceList.add(i);
+			}
+			faceList.trimToSize();
+			faceListList.add(faceList);
+		}
+		faceListList.trimToSize();
+		return new Polyhedron3DImpl(vertexList, faceListList);
 	}
 
 	@Override

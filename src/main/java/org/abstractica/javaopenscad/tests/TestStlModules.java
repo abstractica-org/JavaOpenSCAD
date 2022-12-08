@@ -6,6 +6,7 @@ import org.abstractica.javaopenscad.intf.OpenSCADGeometry2D;
 import org.abstractica.javaopenscad.intf.OpenSCADGeometry2DFrom2D;
 import org.abstractica.javaopenscad.intf.OpenSCADGeometry3D;
 import org.abstractica.javaopenscad.JavaOpenSCAD;
+import org.abstractica.javaopenscad.intf.OpenSCADVector2D;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,22 +17,22 @@ public class TestStlModules
 	public static void main(String[] args) throws IOException
 	{
 		JavaOpenSCAD os = new JavaOpenSCADImpl(true);
-		List<Double> vertices = new ArrayList<>();
-		vertices.add(1.0); vertices.add(-1.0);
-		vertices.add(1.0); vertices.add(1.0);
-		vertices.add(-1.0); vertices.add(1.0);
-		vertices.add(-1.0); vertices.add(-1.0);
+		List<OpenSCADVector2D> vertices = new ArrayList<>();
+		vertices.add(os.vector2D(1.0, -1.0));
+		vertices.add(os.vector2D(1.0, 1.0));
+		vertices.add(os.vector2D(-1.0, 1.0));
+		vertices.add(os.vector2D(-1.0, -1.0));
 		OpenSCADGeometry2D geo1 = os.polygon2D(vertices);
 
 		OpenSCADGeometry2D t1 = os.translate2D(1,1).add(geo1);
 		OpenSCADGeometry2DFrom2D r1 = os.rotate2D(45).add(t1);
 		OpenSCADGeometry2D m1 = os.module(r1);
 
-		List<Double> vertices2 = new ArrayList<>();
-		vertices.add(1.0); vertices.add(-1.0);
-		vertices.add(1.0); vertices.add(2.0);
-		vertices.add(-1.0); vertices.add(1.0);
-		vertices.add(-1.0); vertices.add(-1.0);
+		List<OpenSCADVector2D> vertices2 = new ArrayList<>();
+		vertices2.add(os.vector2D(1.0, -1.0));
+		vertices2.add(os.vector2D(1.0, 2.0));
+		vertices2.add(os.vector2D(-1.0, 1.0));
+		vertices2.add(os.vector2D(-1.0, -1.0));
 		OpenSCADGeometry2D geo2 = os.polygon2D(vertices2);
 		OpenSCADGeometry2DFrom2D t2 = os.translate2D(1,1).add(geo2);
 		OpenSCADGeometry2DFrom2D r2 = os.rotate2D(45).add(t2);

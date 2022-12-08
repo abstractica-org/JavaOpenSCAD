@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class STLFile
@@ -30,12 +31,17 @@ public class STLFile
 			STLTriangle triangle = new STLTriangle(di);
 			triangles.add(triangle);
 		}
-		return new STLFile(triangles);
+		return new STLFile(Collections.unmodifiableList(triangles));
 	}
 
 	private final List<STLTriangle> triangles;
 
-	public STLFile(List<STLTriangle> triangles)
+	public List<STLTriangle> getTriangles()
+	{
+		return triangles;
+	}
+
+	private STLFile(List<STLTriangle> triangles)
 	{
 		this.triangles = triangles;
 	}
@@ -84,6 +90,27 @@ public class STLFile
 			x = di.readFloat();
 			y = di.readFloat();
 			z = di.readFloat();
+		}
+
+		@Override
+		public boolean equals(Object o)
+		{
+			if (this == o) return true;
+			if (!(o instanceof STLVector3D)) return false;
+
+			STLVector3D that = (STLVector3D) o;
+			if (Float.compare(that.x, x) != 0) return false;
+			if (Float.compare(that.y, y) != 0) return false;
+			return Float.compare(that.z, z) == 0;
+		}
+
+		@Override
+		public int hashCode()
+		{
+			int result = (x != +0.0f ? Float.floatToIntBits(x) : 0);
+			result = 31 * result + (y != +0.0f ? Float.floatToIntBits(y) : 0);
+			result = 31 * result + (z != +0.0f ? Float.floatToIntBits(z) : 0);
+			return result;
 		}
 
 		public float x()

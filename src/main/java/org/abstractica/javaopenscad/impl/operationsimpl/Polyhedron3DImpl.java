@@ -2,56 +2,31 @@ package org.abstractica.javaopenscad.impl.operationsimpl;
 
 import org.abstractica.code.codebuilder.CodeBuilder;
 import org.abstractica.javaopenscad.impl.core.*;
+import org.abstractica.javaopenscad.intf.OpenSCADVector3D;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Polyhedron3DImpl extends AGeometry3D
 {
-	private final List<Double> vertices;
+	private final List<OpenSCADVector3D> vertices;
 	private final List<List<Integer>> faces;
 
-	public Polyhedron3DImpl(List<Double> vertices, List<List<Integer>> faces)
+	public Polyhedron3DImpl(List<OpenSCADVector3D> vertices, List<List<Integer>> faces)
 	{
 		if(vertices == null) throw new IllegalArgumentException("vertices == null");
 		if(faces == null) throw new IllegalArgumentException("faces == null");
-		if(vertices.size() % 3 != 0) throw new IllegalArgumentException("vertices.size() % 3 != 0");
-		int numberOfVertices = vertices.size() / 3;
-		List<Double> tmpVertices = new ArrayList<>();
-		for(Double d : vertices)
-		{
-			tmpVertices.add(d);
-		}
-		this.vertices = Collections.unmodifiableList(tmpVertices);
-
-		List<List<Integer>> tmpPaths = new ArrayList<>();
-		for (List<Integer> face : faces)
-		{
-			List<Integer> tmpFace = new ArrayList<>();
-			for(Integer i : face)
-			{
-				if(i < 0 || i >= numberOfVertices)
-				{
-					throw new IllegalArgumentException("i < 0 || i >= numberOfVertices");
-				}
-				tmpFace.add(i);
-			}
-			if(tmpFace.size() < 3)
-			{
-				throw new IllegalArgumentException("face.size() < 3");
-			}
-			tmpPaths.add(Collections.unmodifiableList(tmpFace));
-		}
-		this.faces = Collections.unmodifiableList(tmpPaths);
+		this.vertices = vertices;
+		this.faces = faces;
 	}
 
 	@Override
 	protected void getArguments(ArgumentCollector collector)
 	{
-		for(Double d: vertices)
+		for(OpenSCADVector3D v: vertices)
 		{
-			collector.add(d);
+			collector.add(v.x());
+			collector.add(v.y());
+			collector.add(v.z());
 		}
 
 		for (List<Integer> face : faces)
@@ -78,13 +53,14 @@ public class Polyhedron3DImpl extends AGeometry3D
 		// -->
 		for(int i = 0; i < vertices.size(); i += 3)
 		{
+			OpenSCADVector3D v = vertices.get(i);
 			if(i != 0) cb.print(", ");
 			cb.print("[");
-			cb.print(Double.toString(vertices.get(i + 0)));
+			cb.print(Double.toString(v.x()));
 			cb.print(", ");
-			cb.print(Double.toString(vertices.get(i + 1)));
+			cb.print(Double.toString(v.y()));
 			cb.print(", ");
-			cb.print(Double.toString(vertices.get(i + 2)));
+			cb.print(Double.toString(v.z()));
 			cb.print("]");
 		}
 		cb.println();
@@ -130,8 +106,6 @@ public class Polyhedron3DImpl extends AGeometry3D
 		cb.undent();
 		// <-
 		cb.println("]");
-		//cb.print(", convexity = ");
-		//cb.println(Integer.toString(polyhedron.convexity()));
 		cb.undent();
 		// <
 		cb.print(")");

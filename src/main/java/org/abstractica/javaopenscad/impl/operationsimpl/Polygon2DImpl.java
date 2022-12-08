@@ -3,74 +3,21 @@ package org.abstractica.javaopenscad.impl.operationsimpl;
 import org.abstractica.javaopenscad.impl.core.AGeometry2D;
 import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
 import org.abstractica.code.codebuilder.CodeBuilder;
+import org.abstractica.javaopenscad.intf.OpenSCADVector2D;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Polygon2DImpl extends AGeometry2D
 {
-	private final List<Double> vertices;
+	private final List<OpenSCADVector2D> vertices;
 	private final List<List<Integer>> paths;
 
-	public Polygon2DImpl(List<Double> vertices, List<List<Integer>> paths)
+	public Polygon2DImpl(List<OpenSCADVector2D> vertices, List<List<Integer>> paths)
 	{
 		if(paths == null) throw new IllegalArgumentException("paths == null");
 		if(vertices == null) throw new IllegalArgumentException("vertices == null");
-		if(vertices.size() % 2 != 0)
-		{
-			throw new IllegalArgumentException("Vertices must be a multiple of 2");
-		}
-		int numberOfVertices = vertices.size() / 2;
-		List<Double> tmpVertices = new ArrayList<>();
-		for(Double d : vertices)
-		{
-			tmpVertices.add(d);
-		}
-		this.vertices = Collections.unmodifiableList(tmpVertices);
-		List<List<Integer>> tmpPaths = new ArrayList<>();
-		for(List<Integer> path : paths)
-		{
-			if(path.size() < 3)
-			{
-				throw new IllegalArgumentException("Path must have at least 3 vertices");
-			}
-			List<Integer> tmpPath = new ArrayList<>();
-			for(Integer i : path)
-			{
-				if(i < 0 || i >= numberOfVertices)
-				{
-					throw new IllegalArgumentException("Path index out of bounds");
-				}
-				tmpPath.add(i);
-			}
-			tmpPaths.add(Collections.unmodifiableList(tmpPath));
-		}
-		this.paths = Collections.unmodifiableList(tmpPaths);
-	}
-
-	public Polygon2DImpl(List<Double> vertices)
-	{
-		if(vertices == null) throw new IllegalArgumentException("vertices == null");
-		if(vertices.size() % 2 != 0)
-		{
-			throw new IllegalArgumentException("Vertices must be a multiple of 2");
-		}
-		int numberOfVertices = vertices.size() / 2;
-		List<Double> tmpVertices = new ArrayList<>();
-		for(Double d : vertices)
-		{
-			tmpVertices.add(d);
-		}
-		this.vertices = Collections.unmodifiableList(tmpVertices);
-		List<List<Integer>> tmpPaths = new ArrayList<>();
-		List<Integer> tmpPath = new ArrayList<>();
-		for(int i = 0; i < numberOfVertices; i++)
-		{
-			tmpPath.add(i);
-		}
-		tmpPaths.add(Collections.unmodifiableList(tmpPath));
-		this.paths = Collections.unmodifiableList(tmpPaths);
+		this.vertices = vertices;
+		this.paths = paths;
 	}
 
 	@Override
@@ -85,10 +32,14 @@ public class Polygon2DImpl extends AGeometry2D
 		cb.println("[");
 		cb.indent();
 		//-->>
-		for(int i = 0; i < vertices.size(); i += 2)
+		for(int i = 0; i < vertices.size(); ++i)
 		{
-			if(i != 0) cb.print(",");
-			cb.print("[" + vertices.get(i) + ", " + vertices.get(i + 1) + "]");
+			OpenSCADVector2D v = vertices.get(i);
+			cb.print("[" + v.x() + ", " + v.y() + "]");
+			if(i < vertices.size() - 1)
+			{
+				cb.println(", ");
+			}
 		}
 		cb.println();
 		cb.undent();
@@ -130,8 +81,6 @@ public class Polygon2DImpl extends AGeometry2D
 		cb.undent();
 		// <-
 		cb.println("]");
-		//cb.print(", convexity = ");
-		//cb.println(Integer.toString(polygon.convexity()));
 		cb.undent();
 		// <
 		cb.print(")");
@@ -140,9 +89,10 @@ public class Polygon2DImpl extends AGeometry2D
 	@Override
 	public void getArguments(ArgumentCollector collector)
 	{
-		for(Double d: vertices)
+		for(OpenSCADVector2D v: vertices)
 		{
-			collector.add(d);
+			collector.add(v.x());
+			collector.add(v.y());
 		}
 
 		for (List<Integer> path : paths)
