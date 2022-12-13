@@ -54,7 +54,7 @@ public interface JavaOpenSCAD
 	// Matrix multiplication
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	OpenSCADGeometry3DFrom3D multMatrix3D(double m00, double m01, double m02, double m03,
-	                                      double m10, double m11, double m12, double m13,
+	                                          double m10, double m11, double m12, double m13,
 	                                      double m20, double m21, double m22, double m23);
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Polyhedron3D
@@ -83,8 +83,8 @@ public interface JavaOpenSCAD
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 2D to 3D operations
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
-	OpenSCADGeometry3DFrom2D linearExtrude(double height, double twistDeg, double scale, int slices, int convexity);
-	OpenSCADGeometry3DFrom2D rotateExtrude(double angleDeg, int angularResolution, int convexity);
+	OpenSCADGeometry3DFrom2D linearExtrude(double height, double twistDeg, double scale, int slices);
+	OpenSCADGeometry3DFrom2D rotateExtrude(double angleDeg, int angularResolution);
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Module generation

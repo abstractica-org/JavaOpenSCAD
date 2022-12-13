@@ -39,8 +39,8 @@ public class TestStlModules
 		OpenSCADGeometry2D m2 = os.module(r2);
 		OpenSCADGeometry2DFrom2D union = os.union2D().add(m1).add(m2);
 
-		OpenSCADGeometry3D res1 = os.linearExtrude(5, 0, 1, 1, 10).add(union);
-		OpenSCADGeometry3D res2 = os.linearExtrude(5, 0, 1, 1, 10).add(union);
+		OpenSCADGeometry3D res1 = os.linearExtrude(5, 0, 1, 1).add(union);
+		OpenSCADGeometry3D res2 = os.linearExtrude(5, 0, 1, 1).add(union);
 		res1 = os.module(res1);
 		res2 = os.module(res2);
 		OpenSCADGeometry3D union2 = os.union3D().add(res1).add(res2);

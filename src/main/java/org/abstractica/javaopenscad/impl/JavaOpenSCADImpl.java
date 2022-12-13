@@ -325,15 +325,15 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	}
 
 	@Override
-	public OpenSCADGeometry3DFrom2D linearExtrude(double height, double twistDeg, double scale, int slices, int convexity)
+	public OpenSCADGeometry3DFrom2D linearExtrude(double height, double twistDeg, double scale, int slices)
 	{
-		return new LinearExtrude3DFrom2DImpl(height, twistDeg, scale, slices, convexity);
+		return new LinearExtrude3DFrom2DImpl(height, twistDeg, scale, slices);
 	}
 
 	@Override
-	public OpenSCADGeometry3DFrom2D rotateExtrude(double angleDeg, int angularResolution, int convexity)
+	public OpenSCADGeometry3DFrom2D rotateExtrude(double angleDeg, int angularResolution)
 	{
-		return new RotateExtrude3DFrom2DImpl(angleDeg, angularResolution, convexity);
+		return new RotateExtrude3DFrom2DImpl(angleDeg, angularResolution);
 	}
 
 	@Override
