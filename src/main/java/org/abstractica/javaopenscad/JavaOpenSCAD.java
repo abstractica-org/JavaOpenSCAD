@@ -83,7 +83,11 @@ public interface JavaOpenSCAD
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 2D to 3D operations
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
-	OpenSCADGeometry3DFrom2D linearExtrude(double height, double twistDeg, double scale, int slices);
+	OpenSCADGeometry3DFrom2D linearExtrude(double height,
+	                                       double twistDeg,
+	                                       double scale,
+	                                       int slices,
+	                                       boolean centerZ);
 	OpenSCADGeometry3DFrom2D rotateExtrude(double angleDeg, int angularResolution);
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
