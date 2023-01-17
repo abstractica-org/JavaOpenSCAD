@@ -32,12 +32,10 @@ import java.util.Map;
 public class JavaOpenSCADImpl implements JavaOpenSCAD
 {
 	private final String moduleCacheDirectoryName;
-	private final boolean binarySTL;
 	private final Map<Integer, AGeometry> uniqueModules;
 
-	public JavaOpenSCADImpl(boolean useCache, boolean binarySTL)
+	public JavaOpenSCADImpl(boolean useCache)
 	{
-		this.binarySTL = binarySTL;
 		this.uniqueModules = new HashMap<>();
 		if(!useCache)
 		{
@@ -54,11 +52,6 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 				AllStrings.readFromFile(allStringsFileName);
 			}
 		}
-	}
-
-	public JavaOpenSCADImpl(boolean useCache)
-	{
-		this(useCache, true);
 	}
 
 	@Override
@@ -437,9 +430,7 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 		String prefix = fileName.substring(0, fileName.length() - 4);
 		String scadFileName = prefix + ".scad";
 		generateOpenSCADFile(scadFileName, geometry);
-		String exportFormat = "--export-format ";
-		exportFormat += binarySTL ? "binstl " : "asciistl ";
-		String cmd = "openscad " + exportFormat + " -o " + prefix + ".stl " + prefix + ".scad";
+		String cmd = "openscad --export-format binstl -o " + prefix + ".stl " + prefix + ".scad";
 		CmdLine.runCommand(cmd);
 	}
 
