@@ -32,7 +32,7 @@ public class LinearExtrude3DFrom2DImpl extends AGeometry3DFrom2D
 	public void getCallHeader(CodeBuilder cb)
 	{
 		cb.print("linear_extrude(height = " + height +
-				", center = true, twist = " + twistDeg +
+				", twist = " + twistDeg +
 				", scale = " + scale +
 				", slices = " + slices + ")");
 	}
