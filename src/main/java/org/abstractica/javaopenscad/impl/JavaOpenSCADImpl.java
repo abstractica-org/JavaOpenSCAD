@@ -367,7 +367,22 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	{
 		if(moduleCacheDirectoryName == null)
 		{
-			return geometry;
+			if(geometry instanceof AModule)
+			{
+				return geometry;
+			}
+			return module(geometry);
+		}
+		//Check if this is already a stl loader
+
+		if(geometry instanceof Module3DImpl)
+		{
+			Module3DImpl amod = (Module3DImpl) geometry;
+			AGeometry geo = amod.getGeometry();
+			if(geo instanceof LoadSTL3DImpl)
+			{
+				return geometry;
+			}
 		}
 		int geometryId = getId(geometry);
 		AGeometry res = (AGeometry) loadSTL(moduleCacheDirectoryName + "/M" + geometryId + ".stl");
@@ -426,7 +441,6 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 		exportFormat += binarySTL ? "binstl " : "asciistl ";
 		String cmd = "openscad " + exportFormat + " -o " + prefix + ".stl " + prefix + ".scad";
 		CmdLine.runCommand(cmd);
-		//Files.delete(Paths.get(scadFileName));
 	}
 
 	private void cacheSTL(String name, OpenSCADGeometry3D geometry) throws IOException

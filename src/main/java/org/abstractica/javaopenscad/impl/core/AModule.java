@@ -22,6 +22,11 @@ public abstract class AModule extends AGeometryLeaf
 		return id;
 	}
 
+	public AGeometry getGeometry()
+	{
+		return geometry;
+	}
+
 	public void generateModule(CodeBuilder cb, Map<Integer, AModule> usedModules)
 	{
 		cb.println();
