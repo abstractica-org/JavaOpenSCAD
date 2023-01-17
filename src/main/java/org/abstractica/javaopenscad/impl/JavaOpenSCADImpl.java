@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class JavaOpenSCADImpl implements JavaOpenSCAD
 {
-	private final String moduleDirectoryName;
+	private final String moduleCacheDirectoryName;
 	private final boolean binarySTL;
 	private final Map<Integer, AGeometry> uniqueModules;
 
@@ -41,13 +41,13 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 		this.uniqueModules = new HashMap<>();
 		if(!useCache)
 		{
-			this.moduleDirectoryName = null;
+			this.moduleCacheDirectoryName = null;
 		}
 		else
 		{
-			this.moduleDirectoryName = System.getProperty("user.dir").replace("\\", "/") +
+			this.moduleCacheDirectoryName = System.getProperty("user.dir").replace("\\", "/") +
 								"/OpenSCAD/ModuleCache";
-			String allStringsFileName = moduleDirectoryName + "/AllStrings/AllStrings.txt";
+			String allStringsFileName = moduleCacheDirectoryName + "/AllStrings/AllStrings.txt";
 			java.nio.file.Path path = Paths.get(allStringsFileName);
 			if(Files.exists(path))
 			{
@@ -353,31 +353,37 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	public OpenSCADGeometry3D module(OpenSCADGeometry3D geometry)
 	{
 		int geometryId = getId(geometry);
-		if(moduleDirectoryName == null)
+		AGeometry geo = uniqueModules.get(geometryId);
+		if(geo == null)
 		{
-			AGeometry geo = uniqueModules.get(geometryId);
-			if(geo == null)
-			{
-				geo = (AGeometry) geometry;
-				uniqueModules.put(geometryId, geo);
-			}
-			return new Module3DImpl(geo, geometryId);
+			geo = (AGeometry) geometry;
+			uniqueModules.put(geometryId, geo);
 		}
+		return new Module3DImpl(geo, geometryId);
+	}
 
-		AGeometry res = (AGeometry) loadSTL(moduleDirectoryName + "/M" + geometryId + ".stl");
+	@Override
+	public OpenSCADGeometry3D cacheGeometry3D(OpenSCADGeometry3D geometry) throws IOException
+	{
+		if(moduleCacheDirectoryName == null)
+		{
+			return geometry;
+		}
+		int geometryId = getId(geometry);
+		AGeometry res = (AGeometry) loadSTL(moduleCacheDirectoryName + "/M" + geometryId + ".stl");
 		int loaderId = getId(res);
 		AGeometry geo = uniqueModules.get(loaderId);
 		if(geo == null)
 		{
 			geo = (AGeometry) res;
 			uniqueModules.put(loaderId, geo);
-			saveSTL("M" + geometryId, geometry);
+			cacheSTL("M" + geometryId, geometry);
 		}
 		return new Module3DImpl(geo, loaderId);
 	}
 
 	@Override
-	public void generateOpenSCADFile(String fileName, OpenSCADGeometry geometry)
+	public void generateOpenSCADFile(String fileName, OpenSCADGeometry geometry) throws IOException
 	{
 		java.nio.file.Path path = Paths.get(fileName);
 		TextOutput out = new StringBuilderTextOutput();
@@ -387,18 +393,15 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 				"(", ", ", ")"  );
 		generate(cb,(AGeometry) geometry);
 		java.nio.file.Path parentDir = path.getParent();
-		try
+
+		if (parentDir != null && !Files.exists(parentDir))
 		{
-			if (parentDir != null && !Files.exists(parentDir))
-				Files.createDirectories(parentDir);
-			Files.writeString(path, cb.toString());
-		}catch(IOException e)
-		{
-			throw new RuntimeException("Could not create OpenSCAD file: " + fileName, e);
+			Files.createDirectories(parentDir);
 		}
-		if(moduleDirectoryName != null)
+		Files.writeString(path, cb.toString());
+		if(moduleCacheDirectoryName != null)
 		{
-			String allStringsFileName = moduleDirectoryName + "/AllStrings/AllStrings.txt";
+			String allStringsFileName = moduleCacheDirectoryName + "/AllStrings/AllStrings.txt";
 			AllStrings.writeToFile(allStringsFileName);
 		}
 	}
@@ -410,17 +413,30 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	}
 
 	@Override
-	public void saveSTL(String name, OpenSCADGeometry3D geometry)
+	public void saveSTL(String fileName, OpenSCADGeometry3D geometry) throws IOException
 	{
-		String prefix = moduleDirectoryName + "/" + name;
-		String scadFile = prefix+".scad";
-		if(!Files.exists(Paths.get(scadFile)))
+		if(!fileName.endsWith(".stl"))
 		{
-			generateOpenSCADFile(prefix + ".scad", geometry);
-			String exportFormat = "--export-format ";
-			exportFormat += binarySTL ? "binstl " : "asciistl ";
-			String cmd = "openscad " + exportFormat + " -o " + prefix + ".stl " + prefix + ".scad";
-			CmdLine.runCommand(cmd);
+			throw new IllegalArgumentException("File name must end with .stl");
+		}
+		String prefix = fileName.substring(0, fileName.length() - 4);
+		String scadFileName = prefix + ".scad";
+		generateOpenSCADFile(scadFileName, geometry);
+		String exportFormat = "--export-format ";
+		exportFormat += binarySTL ? "binstl " : "asciistl ";
+		String cmd = "openscad " + exportFormat + " -o " + prefix + ".stl " + prefix + ".scad";
+		CmdLine.runCommand(cmd);
+		//Files.delete(Paths.get(scadFileName));
+	}
+
+	private void cacheSTL(String name, OpenSCADGeometry3D geometry) throws IOException
+	{
+		String prefix = moduleCacheDirectoryName + "/" + name;
+		String stlFileName = prefix + ".stl";
+		String scadFileName = prefix + ".scad";
+		if(!Files.exists(Paths.get(stlFileName)) || !Files.exists(Paths.get(scadFileName)))
+		{
+			saveSTL(stlFileName, geometry);
 		}
 	}
 

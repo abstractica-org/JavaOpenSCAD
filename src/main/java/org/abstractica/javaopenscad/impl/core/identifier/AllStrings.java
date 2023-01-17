@@ -31,20 +31,17 @@ public class AllStrings
 		return allStrings.containsKey(str);
 	}
 
-	public static void writeToFile(String fileName)
+	public static void writeToFile(String fileName) throws IOException
 	{
 		java.nio.file.Path path = Paths.get(fileName);
 		TextOutput out = new StringBuilderTextOutput();
 		java.nio.file.Path parentDir = path.getParent();
-		try
+
+		if (parentDir != null && !Files.exists(parentDir))
 		{
-			if (parentDir != null && !Files.exists(parentDir))
-				Files.createDirectories(parentDir);
-			Files.writeString(path, listAllStrings());
-		}catch(IOException e)
-		{
-			throw new RuntimeException("Could not create OpenSCAD file: " + fileName, e);
+			Files.createDirectories(parentDir);
 		}
+		Files.writeString(path, listAllStrings());
 	}
 
 	public static void readFromFile(String fileName)

@@ -20,7 +20,7 @@ public class TestStlModules
 		List<OpenSCADVector2D> vertices = new ArrayList<>();
 		vertices.add(os.vector2D(1.0, -1.0));
 		vertices.add(os.vector2D(1.0, 1.0));
-		vertices.add(os.vector2D(-1.0, 1.0));
+		vertices.add(os.vector2D(-2.0, 1.0));
 		vertices.add(os.vector2D(-1.0, -1.0));
 		OpenSCADGeometry2D geo1 = os.polygon2D(vertices);
 
@@ -37,12 +37,15 @@ public class TestStlModules
 		OpenSCADGeometry2DFrom2D t2 = os.translate2D(1,1).add(geo2);
 		OpenSCADGeometry2DFrom2D r2 = os.rotate2D(45).add(t2);
 		OpenSCADGeometry2D m2 = os.module(r2);
+
 		OpenSCADGeometry2DFrom2D union = os.union2D().add(m1).add(m2);
 
 		OpenSCADGeometry3D res1 = os.linearExtrude(5, 0, 1, 1).add(union);
 		OpenSCADGeometry3D res2 = os.linearExtrude(5, 0, 1, 1).add(union);
 		res1 = os.module(res1);
+		res1 = os.cacheGeometry3D(res1);
 		res2 = os.module(res2);
+		res2 = os.cacheGeometry3D(res2);
 		OpenSCADGeometry3D union2 = os.union3D().add(res1).add(res2);
 
 
