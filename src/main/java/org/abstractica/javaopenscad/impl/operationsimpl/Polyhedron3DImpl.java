@@ -51,7 +51,7 @@ public class Polyhedron3DImpl extends AGeometry3D
 		cb.println("[");
 		cb.indent();
 		// -->
-		for(int i = 0; i < vertices.size(); i += 3)
+		for(int i = 0; i < vertices.size(); ++i)
 		{
 			OpenSCADVector3D v = vertices.get(i);
 			if(i != 0) cb.print(", ");
