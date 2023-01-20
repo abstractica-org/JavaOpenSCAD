@@ -10,15 +10,19 @@ public class LinearExtrude3DFrom2DImpl extends AGeometry3DFrom2D
 	private final double twistDeg;
 	private final double scale;
 	private final int slices;
-	private final int convexity;
+	private final boolean centerZ;
 
-	public LinearExtrude3DFrom2DImpl(double height, double twistDeg, double scale, int slices, int convexity)
+	public LinearExtrude3DFrom2DImpl(double height,
+	                                 double twistDeg,
+	                                 double scale,
+	                                 int slices,
+	                                 boolean centerZ)
 	{
 		this.height = height;
 		this.twistDeg = twistDeg;
 		this.scale = scale;
 		this.slices = slices;
-		this.convexity = convexity;
+		this.centerZ = centerZ;
 	}
 
 	@Override
@@ -28,17 +32,17 @@ public class LinearExtrude3DFrom2DImpl extends AGeometry3DFrom2D
 		collector.add(twistDeg);
 		collector.add(scale);
 		collector.add(slices);
-		collector.add(convexity);
+		collector.add(centerZ);
 	}
 
 	@Override
 	public void getCallHeader(CodeBuilder cb)
 	{
 		cb.print("linear_extrude(height = " + height +
-				", center = true, twist = " + twistDeg +
+				", twist = " + twistDeg +
 				", scale = " + scale +
 				", slices = " + slices +
-				", convexity = " + convexity + ")");
+				", center = " + centerZ + ")");
 	}
 
 

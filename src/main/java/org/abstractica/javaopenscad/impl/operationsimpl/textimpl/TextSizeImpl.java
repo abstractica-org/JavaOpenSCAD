@@ -1,10 +1,10 @@
 package org.abstractica.javaopenscad.impl.operationsimpl.textimpl;
 
-import org.abstractica.javaopenscad.intf.text.TextSize;
+import org.abstractica.javaopenscad.intf.text.OpenSCADTextSize;
 import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
 import org.abstractica.javaopenscad.impl.core.HasArguments;
 
-public class TextSizeImpl implements TextSize, HasArguments
+public class TextSizeImpl implements OpenSCADTextSize, HasArguments
 {
 	private final double size;
 	private final double spacing;

@@ -1,60 +1,51 @@
 package org.abstractica.javaopenscad.impl;
 
+
 import org.abstractica.cmdline.CmdLine;
 import org.abstractica.code.codebuilder.CodeBuilder;
 import org.abstractica.code.codebuilder.impl.CodeBuilderImpl;
 import org.abstractica.code.codebuilder.textoutput.TextOutput;
 import org.abstractica.code.codebuilder.textoutput.impl.StringBuilderTextOutput;
-import org.abstractica.javaopenscad.JavaOpenSCAD;
-import org.abstractica.javaopenscad.impl.core.AGeometry;
-import org.abstractica.javaopenscad.impl.core.AModule;
-import org.abstractica.javaopenscad.impl.core.Module2DImpl;
-import org.abstractica.javaopenscad.impl.core.Module3DImpl;
+import org.abstractica.javaopenscad.impl.core.*;
 import org.abstractica.javaopenscad.impl.core.identifier.AllStrings;
 import org.abstractica.javaopenscad.impl.core.identifier.Identifier;
-import org.abstractica.javaopenscad.impl.operationsimpl.polyhedronimpl.Geometry3DFromPolyhedron3DImpl;
-import org.abstractica.javaopenscad.impl.operationsimpl.polyhedronimpl.Polyhedron3DImpl;
-import org.abstractica.javaopenscad.impl.operationsimpl.polyhedronimpl.Vector3DImpl;
+
+import org.abstractica.javaopenscad.JavaOpenSCAD;
 import org.abstractica.javaopenscad.intf.*;
-import org.abstractica.javaopenscad.intf.Path;
-import org.abstractica.javaopenscad.intf.Polygon2D;
-import org.abstractica.javaopenscad.intf.Vector2D;
-import org.abstractica.javaopenscad.intf.text.TextAlignment;
-import org.abstractica.javaopenscad.intf.text.TextAttributes;
-import org.abstractica.javaopenscad.intf.text.TextFont;
-import org.abstractica.javaopenscad.intf.text.TextSize;
+
+import org.abstractica.javaopenscad.intf.text.OpenSCADTextAlignment;
+import org.abstractica.javaopenscad.intf.text.OpenSCADTextAttributes;
+import org.abstractica.javaopenscad.intf.text.OpenSCADTextFont;
+import org.abstractica.javaopenscad.intf.text.OpenSCADTextSize;
 import org.abstractica.javaopenscad.impl.operationsimpl.*;
-import org.abstractica.javaopenscad.impl.operationsimpl.polygonimpl.Geometry2DFromPolygon2DImpl;
-import org.abstractica.javaopenscad.impl.operationsimpl.polygonimpl.PathImpl;
-import org.abstractica.javaopenscad.impl.operationsimpl.polygonimpl.Polygon2DImpl;
-import org.abstractica.javaopenscad.impl.operationsimpl.polygonimpl.Vector2DImpl;
+
 import org.abstractica.javaopenscad.impl.operationsimpl.textimpl.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class JavaOpenSCADImpl implements JavaOpenSCAD
 {
-	private final String moduleDirectoryName;
-	private final boolean binarySTL;
+	private final String moduleCacheDirectoryName;
 	private final Map<Integer, AGeometry> uniqueModules;
 
-	public JavaOpenSCADImpl(boolean useCache, boolean binarySTL)
+	public JavaOpenSCADImpl(boolean useCache)
 	{
-		this.binarySTL = binarySTL;
 		this.uniqueModules = new HashMap<>();
 		if(!useCache)
 		{
-			this.moduleDirectoryName = null;
+			this.moduleCacheDirectoryName = null;
 		}
 		else
 		{
-			this.moduleDirectoryName = System.getProperty("user.dir").replace("\\", "/") +
+			this.moduleCacheDirectoryName = System.getProperty("user.dir").replace("\\", "/") +
 								"/OpenSCAD/ModuleCache";
-			String allStringsFileName = moduleDirectoryName + "/AllStrings/AllStrings.txt";
+			String allStringsFileName = moduleCacheDirectoryName + "/AllStrings/AllStrings.txt";
 			java.nio.file.Path path = Paths.get(allStringsFileName);
 			if(Files.exists(path))
 			{
@@ -63,253 +54,287 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 		}
 	}
 
-	public JavaOpenSCADImpl(boolean useCache)
+	@Override
+	public OpenSCADVector2D vector2D(double x, double y)
 	{
-		this(useCache, true);
+		return new OpenSCADVector2DImpl(x, y);
 	}
 
 	@Override
-	public Vector2D vector2D(double x, double y)
+	public OpenSCADGeometry2D polygon2D(Iterable<OpenSCADVector2D> vertices)
 	{
-		return new Vector2DImpl(x, y);
+		ArrayList<OpenSCADVector2D> vertexList = new ArrayList<>();
+		ArrayList<Integer> path = new ArrayList<>();
+		for(OpenSCADVector2D vertex : vertices)
+		{
+			path.add(vertexList.size());
+			vertexList.add(vertex);
+		}
+		path.trimToSize();
+		vertexList.trimToSize();
+		List<List<Integer>> paths = new ArrayList<>(1);
+		paths.add(path);
+		return new Polygon2DImpl(vertexList, paths);
 	}
 
 	@Override
-	public Path path(Iterable<Integer> path)
+	public OpenSCADGeometry2D polygon2D(Iterable<OpenSCADVector2D> vertices, Iterable<? extends Iterable<Integer>> paths)
 	{
-		return new PathImpl(path);
+		ArrayList<OpenSCADVector2D> vertexList = new ArrayList<>();
+		for(OpenSCADVector2D vertex : vertices)
+		{
+			vertexList.add(vertex);
+		}
+		vertexList.trimToSize();
+		ArrayList<List<Integer>> pathListList = new ArrayList<>();
+		for(Iterable<Integer> path : paths)
+		{
+			ArrayList<Integer> pathList = new ArrayList<>();
+			for(Integer i : path)
+			{
+				pathList.add(i);
+			}
+			pathList.trimToSize();
+			pathListList.add(pathList);
+		}
+		pathListList.trimToSize();
+		return new Polygon2DImpl(vertexList, pathListList);
 	}
 
 	@Override
-	public Polygon2D polygon2D(Iterable<Vector2D> vertices, int convexity)
-	{
-		return new Polygon2DImpl(vertices, null, convexity);
-	}
-
-	@Override
-	public Polygon2D polygon2D(Iterable<Vector2D> vertices, Iterable<Path> paths, int convexity)
-	{
-		return new Polygon2DImpl(vertices, paths, convexity);
-	}
-
-	@Override
-	public Geometry2D polygon2DGeometry(Polygon2D polygon)
-	{
-		return module(new Geometry2DFromPolygon2DImpl(polygon));
-	}
-
-	@Override
-	public Geometry2DFrom2D translate2D(double x, double y)
+	public OpenSCADGeometry2DFrom2D translate2D(double x, double y)
 	{
 		return new Translate2DImpl(x, y);
 	}
 
 	@Override
-	public Geometry2DFrom2D rotate2D(double deg)
+	public OpenSCADGeometry2DFrom2D rotate2D(double deg)
 	{
-		return new RotateAndProject2DImpl(0,0, deg);
+		return new Rotate2DImpl(deg);
 	}
 
 	@Override
-	public Geometry2DFrom2D rotateAndProject2D(double xDeg, double yDeg, double zDeg)
+	public OpenSCADGeometry2DFrom2D rotateAndProject2D(double xDeg, double yDeg, double zDeg)
 	{
 		return new RotateAndProject2DImpl(xDeg, yDeg, zDeg);
 	}
 
 	@Override
-	public Geometry2DFrom2D scale2D(double x, double y)
+	public OpenSCADGeometry2DFrom2D scale2D(double x, double y)
 	{
 		return new Scale2DImpl(x, y);
 	}
 
 	@Override
-	public Geometry2DFrom2D resize2D(double x, double y, boolean autoX, boolean autoY)
+	public OpenSCADGeometry2DFrom2D resize2D(double x, double y, boolean autoX, boolean autoY)
 	{
 		return new Resize2DImpl(x, y, autoX, autoY);
 	}
 
 	@Override
-	public Geometry2DFrom2D mirror2D(double normX, double normY)
+	public OpenSCADGeometry2DFrom2D mirror2D(double normX, double normY)
 	{
 		return new Mirror2DImpl(normX, normY);
 	}
 
 	@Override
-	public Geometry2DFrom2D union2D()
+	public OpenSCADGeometry2DFrom2D union2D()
 	{
 		return new Union2DImpl();
 	}
 
 	@Override
-	public Geometry2DFrom2D intersection2D()
+	public OpenSCADGeometry2DFrom2D intersection2D()
 	{
 		return new Intersection2DImpl();
 	}
 
 	@Override
-	public Geometry2DFrom2D difference2D()
+	public OpenSCADGeometry2DFrom2D difference2D()
 	{
 		return new Difference2DImpl();
 	}
 
 	@Override
-	public Geometry2DFrom2D hull2D()
+	public OpenSCADGeometry2DFrom2D hull2D()
 	{
 		return new Hull2DImpl();
 	}
 
 	@Override
-	public Geometry2DFrom2D minkowsky2D()
+	public OpenSCADGeometry2DFrom2D minkowsky2D()
 	{
 		return new Minkowsky2DImpl();
 	}
 
 	@Override
-	public Geometry2DFrom2D offset2D(double delta, boolean chamfer)
+	public OpenSCADGeometry2DFrom2D offset2D(double delta, boolean chamfer)
 	{
 		return new Offset2DImpl(delta, chamfer);
 	}
 
 	@Override
-	public Geometry2DFrom2D offsetRound2D(double radius, int angularResolution)
+	public OpenSCADGeometry2DFrom2D offsetRound2D(double radius, int angularResolution)
 	{
 		return new OffsetRound2DImpl(radius, angularResolution);
 	}
 
 	@Override
-	public Geometry2DFrom2D color2D(double r, double g, double b, double a)
+	public OpenSCADGeometry2DFrom2D color2D(double r, double g, double b, double a)
 	{
 		return null;
 	}
 
 	@Override
-	public TextFont textFont(String fontName, String fontStyle, String language, String script)
+	public OpenSCADTextFont textFont(String fontName, String fontStyle, String language, String script)
 	{
 		return new TextFontImpl(fontName, fontStyle, language, script);
 	}
 
 	@Override
-	public TextSize textSize(double size, double spacing)
+	public OpenSCADTextSize textSize(double size, double spacing)
 	{
 		return new TextSizeImpl(size, spacing);
 	}
 
 	@Override
-	public TextAlignment textAlignment(TextAlignment.Direction direction, TextAlignment.Horizontal horizontal, TextAlignment.Vertical vertical)
+	public OpenSCADTextAlignment textAlignment(OpenSCADTextAlignment.Direction direction, OpenSCADTextAlignment.Horizontal horizontal, OpenSCADTextAlignment.Vertical vertical)
 	{
 		return new TextAlignmentImpl(direction, horizontal, vertical);
 	}
 
 	@Override
-	public TextAttributes textAttributes(TextFont font, TextSize size, TextAlignment alignment)
+	public OpenSCADTextAttributes textAttributes(OpenSCADTextFont font, OpenSCADTextSize size, OpenSCADTextAlignment alignment)
 	{
 		return new TextAttributesImpl((TextFontImpl) font, (TextSizeImpl) size, (TextAlignmentImpl) alignment);
 	}
 
 	@Override
-	public Geometry2D text(String text, TextAttributes attributes, int angularResolution)
+	public OpenSCADGeometry2D text(String text, OpenSCADTextAttributes attributes, int angularResolution)
 	{
 		return new Text2DImpl(text, (TextAttributesImpl) attributes, angularResolution);
 	}
 
 	@Override
-	public Vector3D vector3D(double x, double y, double z)
+	public OpenSCADVector3D vector3D(double x, double y, double z)
 	{
-		return new Vector3DImpl(x, y, z);
+		return new OpenSCADVector3DImpl(x, y, z);
 	}
 
 	@Override
-	public Polyhedron3D polyhedron3D(Iterable<Vector3D> vertices, Iterable<Path> faces, int convexity)
+	public OpenSCADGeometry3DFrom3D multMatrix3D(double m00, double m01, double m02, double m03, double m10, double m11, double m12, double m13, double m20, double m21, double m22, double m23)
 	{
-		return new Polyhedron3DImpl(vertices, faces, convexity);
+		return new MultMatrix3DImpl(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23);
 	}
 
 	@Override
-	public Geometry3D polyhedron3DGeometry(Polyhedron3D polyhedron)
+	public OpenSCADGeometry3D polyhedron3D(Iterable<OpenSCADVector3D> vertices, Iterable<? extends Iterable<Integer>> faces)
 	{
-		return module(new Geometry3DFromPolyhedron3DImpl(polyhedron));
+		ArrayList<OpenSCADVector3D> vertexList = new ArrayList<>();
+		for(OpenSCADVector3D vertex : vertices)
+		{
+			vertexList.add(vertex);
+		}
+		vertexList.trimToSize();
+		ArrayList<List<Integer>> faceListList = new ArrayList<>();
+		for(Iterable<Integer> face : faces)
+		{
+			ArrayList<Integer> faceList = new ArrayList<>();
+			for(Integer i : face)
+			{
+				faceList.add(i);
+			}
+			faceList.trimToSize();
+			faceListList.add(faceList);
+		}
+		faceListList.trimToSize();
+		return new Polyhedron3DImpl(vertexList, faceListList);
 	}
 
 	@Override
-	public Geometry2DFrom3D project(boolean cutAtZeroZ)
+	public OpenSCADGeometry2DFrom3D project(boolean cutAtZeroZ)
 	{
 		return new Projection2DFrom3DImpl(cutAtZeroZ);
 	}
 
 	@Override
-	public Geometry3DFrom3D translate3D(double x, double y, double z)
+	public OpenSCADGeometry3DFrom3D translate3D(double x, double y, double z)
 	{
 		return new Translate3DImpl(x, y, z);
 	}
 
 	@Override
-	public Geometry3DFrom3D rotate3D(double xDeg, double yDeg, double zDeg)
+	public OpenSCADGeometry3DFrom3D rotate3D(double xDeg, double yDeg, double zDeg)
 	{
 		return new Rotate3DImpl(xDeg, yDeg, zDeg);
 	}
 
 	@Override
-	public Geometry3DFrom3D scale3D(double x, double y, double z)
+	public OpenSCADGeometry3DFrom3D scale3D(double x, double y, double z)
 	{
 		return new Scale3DImpl(x, y, z);
 	}
 
 	@Override
-	public Geometry3DFrom3D resize3D(double x, double y, double z, boolean autoX, boolean autoY, boolean autoZ)
+	public OpenSCADGeometry3DFrom3D resize3D(double x, double y, double z, boolean autoX, boolean autoY, boolean autoZ)
 	{
 		return new Resize3DImpl(x, y, z, autoX, autoY, autoZ);
 	}
 
 	@Override
-	public Geometry3DFrom3D mirror3D(double normX, double normY, double normZ)
+	public OpenSCADGeometry3DFrom3D mirror3D(double normX, double normY, double normZ)
 	{
 		return new Mirror3DImpl(normX, normY, normZ);
 	}
 
 	@Override
-	public Geometry3DFrom3D union3D()
+	public OpenSCADGeometry3DFrom3D union3D()
 	{
 		return new Union3DImpl();
 	}
 
 	@Override
-	public Geometry3DFrom3D intersection3D()
+	public OpenSCADGeometry3DFrom3D intersection3D()
 	{
 		return new Intersection3DImpl();
 	}
 
 	@Override
-	public Geometry3DFrom3D difference3D()
+	public OpenSCADGeometry3DFrom3D difference3D()
 	{
 		return new Difference3DImpl();
 	}
 
 	@Override
-	public Geometry3DFrom3D hull3D()
+	public OpenSCADGeometry3DFrom3D hull3D()
 	{
 		return new Hull3DImpl();
 	}
 
 	@Override
-	public Geometry3DFrom3D minkowsky3D()
+	public OpenSCADGeometry3DFrom3D minkowsky3D()
 	{
 		return new Minkowsky3DImpl();
 	}
 
 	@Override
-	public Geometry3DFrom2D linearExtrude(double height, double twistDeg, double scale, int slices, int convexity)
+	public OpenSCADGeometry3DFrom2D linearExtrude(double height,
+	                                              double twistDeg,
+	                                              double scale,
+	                                              int slices,
+	                                              boolean centerZ)
 	{
-		return new LinearExtrude3DFrom2DImpl(height, twistDeg, scale, slices, convexity);
+		return new LinearExtrude3DFrom2DImpl(height, twistDeg, scale, slices, centerZ);
 	}
 
 	@Override
-	public Geometry3DFrom2D rotateExtrude(double angleDeg, int angularResolution, int convexity)
+	public OpenSCADGeometry3DFrom2D rotateExtrude(double angleDeg, int angularResolution)
 	{
-		return new RotateExtrude3DFrom2DImpl(angleDeg, angularResolution, convexity);
+		return new RotateExtrude3DFrom2DImpl(angleDeg, angularResolution);
 	}
 
 	@Override
-	public Geometry2D module(Geometry2D geometry)
+	public OpenSCADGeometry2D module(OpenSCADGeometry2D geometry)
 	{
 		int id = getId(geometry);
 		AGeometry geo = uniqueModules.get(id);
@@ -322,34 +347,55 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	}
 
 	@Override
-	public Geometry3D module(Geometry3D geometry)
+	public OpenSCADGeometry3D module(OpenSCADGeometry3D geometry)
 	{
 		int geometryId = getId(geometry);
-		if(moduleDirectoryName == null)
+		AGeometry geo = uniqueModules.get(geometryId);
+		if(geo == null)
 		{
-			AGeometry geo = uniqueModules.get(geometryId);
-			if(geo == null)
-			{
-				geo = (AGeometry) geometry;
-				uniqueModules.put(geometryId, geo);
-			}
-			return new Module3DImpl(geo, geometryId);
+			geo = (AGeometry) geometry;
+			uniqueModules.put(geometryId, geo);
 		}
+		return new Module3DImpl(geo, geometryId);
+	}
 
-		AGeometry res = (AGeometry) loadSTL(moduleDirectoryName + "/M" + geometryId + ".stl");
+	@Override
+	public OpenSCADGeometry3D cacheGeometry3D(OpenSCADGeometry3D geometry) throws IOException
+	{
+		if(moduleCacheDirectoryName == null)
+		{
+			if(geometry instanceof AModule)
+			{
+				return geometry;
+			}
+			return module(geometry);
+		}
+		//Check if this is already a stl loader
+
+		if(geometry instanceof Module3DImpl)
+		{
+			Module3DImpl amod = (Module3DImpl) geometry;
+			AGeometry geo = amod.getGeometry();
+			if(geo instanceof LoadSTL3DImpl)
+			{
+				return geometry;
+			}
+		}
+		int geometryId = getId(geometry);
+		AGeometry res = (AGeometry) loadSTL(moduleCacheDirectoryName + "/M" + geometryId + ".stl");
 		int loaderId = getId(res);
 		AGeometry geo = uniqueModules.get(loaderId);
 		if(geo == null)
 		{
 			geo = (AGeometry) res;
 			uniqueModules.put(loaderId, geo);
-			saveSTL("M" + geometryId, geometry);
+			cacheSTL("M" + geometryId, geometry);
 		}
 		return new Module3DImpl(geo, loaderId);
 	}
 
 	@Override
-	public void generateOpenSCADFile(String fileName, Geometry geometry)
+	public void generateOpenSCADFile(String fileName, OpenSCADGeometry geometry) throws IOException
 	{
 		java.nio.file.Path path = Paths.get(fileName);
 		TextOutput out = new StringBuilderTextOutput();
@@ -359,44 +405,51 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 				"(", ", ", ")"  );
 		generate(cb,(AGeometry) geometry);
 		java.nio.file.Path parentDir = path.getParent();
-		try
+
+		if (parentDir != null && !Files.exists(parentDir))
 		{
-			if (parentDir != null && !Files.exists(parentDir))
-				Files.createDirectories(parentDir);
-			Files.writeString(path, cb.toString());
-		}catch(IOException e)
-		{
-			throw new RuntimeException("Could not create OpenSCAD file: " + fileName, e);
+			Files.createDirectories(parentDir);
 		}
-		if(moduleDirectoryName != null)
+		Files.writeString(path, cb.toString());
+		if(moduleCacheDirectoryName != null)
 		{
-			String allStringsFileName = moduleDirectoryName + "/AllStrings/AllStrings.txt";
+			String allStringsFileName = moduleCacheDirectoryName + "/AllStrings/AllStrings.txt";
 			AllStrings.writeToFile(allStringsFileName);
 		}
 	}
 
 	@Override
-	public Geometry3D loadSTL(String fileName)
+	public OpenSCADGeometry3D loadSTL(String fileName)
 	{
 		return new LoadSTL3DImpl(fileName);
 	}
 
 	@Override
-	public void saveSTL(String name, Geometry3D geometry)
+	public void saveSTL(String fileName, OpenSCADGeometry3D geometry) throws IOException
 	{
-		String prefix = moduleDirectoryName + "/" + name;
-		String scadFile = prefix+".scad";
-		if(!Files.exists(Paths.get(scadFile)))
+		if(!fileName.endsWith(".stl"))
 		{
-			generateOpenSCADFile(prefix + ".scad", geometry);
-			String exportFormat = "--export-format ";
-			exportFormat += binarySTL ? "binstl " : "asciistl ";
-			String cmd = "openscad " + exportFormat + " -o " + prefix + ".stl " + prefix + ".scad";
-			CmdLine.runCommand(cmd);
+			throw new IllegalArgumentException("File name must end with .stl");
+		}
+		String prefix = fileName.substring(0, fileName.length() - 4);
+		String scadFileName = prefix + ".scad";
+		generateOpenSCADFile(scadFileName, geometry);
+		String cmd = "openscad --export-format binstl -o " + prefix + ".stl " + prefix + ".scad";
+		CmdLine.runCommand(cmd);
+	}
+
+	private void cacheSTL(String name, OpenSCADGeometry3D geometry) throws IOException
+	{
+		String prefix = moduleCacheDirectoryName + "/" + name;
+		String stlFileName = prefix + ".stl";
+		String scadFileName = prefix + ".scad";
+		if(!Files.exists(Paths.get(stlFileName)) || !Files.exists(Paths.get(scadFileName)))
+		{
+			saveSTL(stlFileName, geometry);
 		}
 	}
 
-	private int getId(Geometry geometry)
+	private int getId(OpenSCADGeometry geometry)
 	{
 		Identifier identifier = new Identifier((AGeometry) geometry);
 		return identifier.getUniqueId();

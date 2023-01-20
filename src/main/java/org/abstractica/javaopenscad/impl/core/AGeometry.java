@@ -1,11 +1,11 @@
 package org.abstractica.javaopenscad.impl.core;
 
-import org.abstractica.javaopenscad.intf.Geometry;
+import org.abstractica.javaopenscad.intf.OpenSCADGeometry;
 import org.abstractica.code.codebuilder.CodeBuilder;
 
 import java.util.Map;
 
-public abstract class AGeometry implements Geometry, HasArguments
+public abstract class AGeometry implements OpenSCADGeometry, HasArguments
 {
 	private boolean debugMarked;
 	private boolean disabled;

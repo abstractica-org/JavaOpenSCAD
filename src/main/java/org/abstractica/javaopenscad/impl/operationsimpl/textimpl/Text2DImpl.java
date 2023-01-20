@@ -1,6 +1,6 @@
 package org.abstractica.javaopenscad.impl.operationsimpl.textimpl;
 
-import org.abstractica.javaopenscad.intf.text.TextAlignment;
+import org.abstractica.javaopenscad.intf.text.OpenSCADTextAlignment;
 import org.abstractica.javaopenscad.impl.core.AGeometry2D;
 import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
 import org.abstractica.code.codebuilder.CodeBuilder;
@@ -90,7 +90,7 @@ public class Text2DImpl extends AGeometry2D
 		cb.print(")");
 	}
 
-	private String halign(TextAlignment.Horizontal horizontal)
+	private String halign(OpenSCADTextAlignment.Horizontal horizontal)
 	{
 		return switch(horizontal)
 		{
@@ -100,7 +100,7 @@ public class Text2DImpl extends AGeometry2D
 		};
 	}
 
-	private String valign(TextAlignment.Vertical vertical)
+	private String valign(OpenSCADTextAlignment.Vertical vertical)
 	{
 		return switch(vertical)
 		{
@@ -111,7 +111,7 @@ public class Text2DImpl extends AGeometry2D
 		};
 	}
 
-	private String direction(TextAlignment.Direction direction)
+	private String direction(OpenSCADTextAlignment.Direction direction)
 	{
 		return switch(direction)
 		{
