@@ -427,15 +427,7 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	@Override
 	public void saveSTL(String fileName, OpenSCADGeometry3D geometry) throws IOException
 	{
-		if(!fileName.endsWith(".stl"))
-		{
-			throw new IllegalArgumentException("File name must end with .stl");
-		}
-		String prefix = fileName.substring(0, fileName.length() - 4);
-		String scadFileName = prefix + ".scad";
-		generateOpenSCADFile(scadFileName, geometry);
-		String cmd = "openscad --export-format binstl -o \"" + prefix + ".stl\" \"" + prefix + ".scad\"";
-		CmdLine.runCommand(cmd);
+		saveSTL(fileName, geometry, true);
 	}
 
 	private void cacheSTL(String name, OpenSCADGeometry3D geometry) throws IOException
@@ -445,7 +437,24 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 		String scadFileName = prefix + ".scad";
 		if(!Files.exists(Paths.get(stlFileName)) || !Files.exists(Paths.get(scadFileName)))
 		{
-			saveSTL(stlFileName, geometry);
+			saveSTL(stlFileName, geometry, false);
+		}
+	}
+
+	private void saveSTL(String fileName, OpenSCADGeometry3D geometry, boolean deleteScadFile) throws IOException
+	{
+		if(!fileName.endsWith(".stl"))
+		{
+			throw new IllegalArgumentException("File name must end with .stl");
+		}
+		String prefix = fileName.substring(0, fileName.length() - 4);
+		String scadFileName = prefix + ".scad";
+		generateOpenSCADFile(scadFileName, geometry);
+		String cmd = "openscad --export-format binstl -o \"" + prefix + ".stl\" \"" + prefix + ".scad\"";
+		CmdLine.runCommand(cmd);
+		if(deleteScadFile)
+		{
+			Files.delete(Paths.get(scadFileName));
 		}
 	}
 
