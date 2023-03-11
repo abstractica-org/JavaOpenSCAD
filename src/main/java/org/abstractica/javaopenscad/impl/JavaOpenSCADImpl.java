@@ -23,6 +23,7 @@ import org.abstractica.javaopenscad.impl.operationsimpl.textimpl.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -421,7 +422,9 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	@Override
 	public OpenSCADGeometry3D loadSTL(String fileName)
 	{
-		return new LoadSTL3DImpl(fileName);
+		Path path = Paths.get(fileName).toAbsolutePath();
+		String absoluteFileName = path.toString().replace("\\", "/");
+		return new LoadSTL3DImpl(absoluteFileName);
 	}
 
 	@Override
