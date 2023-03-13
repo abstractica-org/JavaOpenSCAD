@@ -32,9 +32,13 @@ public class STL
 
 
 	private final List<STLTriangle> triangles;
+	private STLVector3D min;
+	private STLVector3D max;
 
 	public STL()
 	{
+		min = null;
+		max = null;
 		this.triangles = new ArrayList<>();
 	}
 
@@ -46,6 +50,24 @@ public class STL
 	public List<STLTriangle> getTriangles()
 	{
 		return triangles;
+	}
+
+	public STLVector3D getMin()
+	{
+		if(min == null)
+		{
+			calculateMinAndMax();
+		}
+		return min;
+	}
+
+	public STLVector3D getMax()
+	{
+		if(max == null)
+		{
+			calculateMinAndMax();
+		}
+		return max;
 	}
 
 	public void save(String fileName) throws IOException
@@ -102,5 +124,38 @@ public class STL
 			res += (in.readUnsignedByte() << (i * 8));
 		}
 		return res;
+	}
+
+	private void calculateMinAndMax()
+	{
+		float minX = Float.MAX_VALUE;
+		float minY = Float.MAX_VALUE;
+		float minZ = Float.MAX_VALUE;
+		float maxX = -Float.MAX_VALUE;
+		float maxY = -Float.MAX_VALUE;
+		float maxZ = -Float.MAX_VALUE;
+		for(STLTriangle triangle : triangles)
+		{
+			if(triangle.v1.x < minX) minX = triangle.v1.x;
+			if(triangle.v1.y < minY) minY = triangle.v1.y;
+			if(triangle.v1.z < minZ) minZ = triangle.v1.z;
+			if(triangle.v1.x > maxX) maxX = triangle.v1.x;
+			if(triangle.v1.y > maxY) maxY = triangle.v1.y;
+			if(triangle.v1.z > maxZ) maxZ = triangle.v1.z;
+			if(triangle.v2.x < minX) minX = triangle.v2.x;
+			if(triangle.v2.y < minY) minY = triangle.v2.y;
+			if(triangle.v2.z < minZ) minZ = triangle.v2.z;
+			if(triangle.v2.x > maxX) maxX = triangle.v2.x;
+			if(triangle.v2.y > maxY) maxY = triangle.v2.y;
+			if(triangle.v2.z > maxZ) maxZ = triangle.v2.z;
+			if(triangle.v3.x < minX) minX = triangle.v3.x;
+			if(triangle.v3.y < minY) minY = triangle.v3.y;
+			if(triangle.v3.z < minZ) minZ = triangle.v3.z;
+			if(triangle.v3.x > maxX) maxX = triangle.v3.x;
+			if(triangle.v3.y > maxY) maxY = triangle.v3.y;
+			if(triangle.v3.z > maxZ) maxZ = triangle.v3.z;
+		}
+		min = new STLVector3D(minX, minY, minZ);
+		max = new STLVector3D(maxX, maxY, maxZ);
 	}
 }
