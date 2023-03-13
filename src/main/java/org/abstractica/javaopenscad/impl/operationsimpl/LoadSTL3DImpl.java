@@ -13,6 +13,11 @@ public class LoadSTL3DImpl extends AGeometry3D
 		this.fileName = fileName;
 	}
 
+	public String getFileName()
+	{
+		return fileName;
+	}
+
 	@Override
 	public void getCallHeader(CodeBuilder cb)
 	{
