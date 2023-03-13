@@ -535,10 +535,14 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 		String scadFileName = prefix + ".scad";
 		generateOpenSCADFile(scadFileName, geometry);
 		String cmd = "openscad --export-format binstl -o \"" + prefix + ".stl\" \"" + prefix + ".scad\"";
-		CmdLine.runCommand(cmd);
+		int exitCode = CmdLine.runCommand(cmd);
 		if(deleteScadFile)
 		{
 			Files.delete(Paths.get(scadFileName));
+		}
+		if(exitCode != 0)
+		{
+			throw new RuntimeException("OpenSCAD failed with exit code " + exitCode);
 		}
 	}
 

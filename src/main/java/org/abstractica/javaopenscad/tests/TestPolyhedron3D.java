@@ -55,6 +55,7 @@ public class TestPolyhedron3D
 
 		OpenSCADGeometry3D res = os.polyhedron3D(vertices, faces);
 		os.generateOpenSCADFile("OpenSCAD/output.scad", res);
+		os.saveSTL("OpenSCAD/output.stl", res);
 	}
 
 }
