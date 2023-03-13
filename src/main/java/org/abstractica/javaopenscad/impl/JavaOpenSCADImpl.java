@@ -20,6 +20,8 @@ import org.abstractica.javaopenscad.intf.text.OpenSCADTextSize;
 import org.abstractica.javaopenscad.impl.operationsimpl.*;
 
 import org.abstractica.javaopenscad.impl.operationsimpl.textimpl.*;
+import org.abstractica.javaopenscad.stl.STL;
+import org.abstractica.javaopenscad.stl.STLVector3D;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -361,6 +363,58 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	}
 
 	@Override
+	public OpenSCADVector2D getMin2D(OpenSCADGeometry2D geometry)
+	{
+		AGeometry geo = (AGeometry) geometry;
+		BoundingBox bb = geo.getBoundingBox();
+		if(bb == null)
+		{
+			bb = calculateBoundingBox(geometry);
+			geo.setBoundingBox(bb);
+		}
+		return vector2D(bb.xMin, bb.yMin);
+	}
+
+	@Override
+	public OpenSCADVector2D getMax2D(OpenSCADGeometry2D geometry)
+	{
+		AGeometry geo = (AGeometry) geometry;
+		BoundingBox bb = geo.getBoundingBox();
+		if(bb == null)
+		{
+			bb = calculateBoundingBox(geometry);
+			geo.setBoundingBox(bb);
+		}
+		return vector2D(bb.xMax, bb.yMax);
+	}
+
+	@Override
+	public OpenSCADVector3D getMin3D(OpenSCADGeometry3D geometry)
+	{
+		AGeometry geo = (AGeometry) geometry;
+		BoundingBox bb = geo.getBoundingBox();
+		if(bb == null)
+		{
+			bb = calculateBoundingBox(geometry);
+			geo.setBoundingBox(bb);
+		}
+		return vector3D(bb.xMin, bb.yMin, bb.zMin);
+	}
+
+	@Override
+	public OpenSCADVector3D getMax3D(OpenSCADGeometry3D geometry)
+	{
+		AGeometry geo = (AGeometry) geometry;
+		BoundingBox bb = geo.getBoundingBox();
+		if(bb == null)
+		{
+			bb = calculateBoundingBox(geometry);
+			geo.setBoundingBox(bb);
+		}
+		return vector3D(bb.xMax, bb.yMax, bb.zMax);
+	}
+
+	@Override
 	public OpenSCADGeometry3D cacheGeometry3D(OpenSCADGeometry3D geometry) throws IOException
 	{
 		if(moduleCacheDirectoryName == null)
@@ -431,6 +485,44 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	public void saveSTL(String fileName, OpenSCADGeometry3D geometry) throws IOException
 	{
 		saveSTL(fileName, geometry, true);
+	}
+
+	private BoundingBox calculateBoundingBox(OpenSCADGeometry2D geometry)
+	{
+		OpenSCADGeometry3DFrom2D linExtrude = linearExtrude(1, 0, 1, 1, false);
+		linExtrude.add(geometry);
+		return calculateBoundingBox(linExtrude);
+	}
+
+	private BoundingBox calculateBoundingBox(OpenSCADGeometry3D geometry)
+	{
+		STL stl;
+		try
+		{
+			if (geometry instanceof LoadSTL3DImpl)
+			{
+				LoadSTL3DImpl loadSTL3D = (LoadSTL3DImpl) geometry;
+				String fileName = loadSTL3D.getFileName();
+				stl = STL.load(fileName);
+			} else
+			{
+				String dirName = (moduleCacheDirectoryName == null) ?
+					System.getProperty("user.dir") + "/TMP" :
+					moduleCacheDirectoryName + "/TMP";
+				String fileName = dirName + "/tmpMinMax.stl";
+				saveSTL(fileName, geometry);
+				stl = STL.load(fileName);
+				Files.delete(Paths.get(fileName));
+				Files.delete(Paths.get(dirName));
+			}
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException(e);
+		}
+		STLVector3D min = stl.getMin();
+		STLVector3D max = stl.getMax();
+		return new BoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
 	}
 
 	private void cacheSTL(String name, OpenSCADGeometry3D geometry) throws IOException

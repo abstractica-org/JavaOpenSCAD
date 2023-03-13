@@ -7,6 +7,7 @@ import java.util.Map;
 
 public abstract class AGeometry implements OpenSCADGeometry, HasArguments
 {
+	private BoundingBox boundingBox;
 	private boolean debugMarked;
 	private boolean disabled;
 
@@ -43,5 +44,15 @@ public abstract class AGeometry implements OpenSCADGeometry, HasArguments
 	public void disable()
 	{
 		disabled = true;
+	}
+
+	public BoundingBox getBoundingBox()
+	{
+		return boundingBox;
+	}
+
+	public void setBoundingBox(BoundingBox boundingBox)
+	{
+		this.boundingBox = boundingBox;
 	}
 }
