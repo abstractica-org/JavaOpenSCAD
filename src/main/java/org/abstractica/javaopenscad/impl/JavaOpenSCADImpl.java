@@ -499,22 +499,11 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 		STL stl;
 		try
 		{
-			if (geometry instanceof LoadSTL3DImpl)
-			{
-				LoadSTL3DImpl loadSTL3D = (LoadSTL3DImpl) geometry;
-				String fileName = loadSTL3D.getFileName();
-				stl = STL.load(fileName);
-			} else
-			{
-				String dirName = (moduleCacheDirectoryName == null) ?
-					System.getProperty("user.dir") + "/TMP" :
-					moduleCacheDirectoryName + "/TMP";
-				String fileName = dirName + "/tmpMinMax.stl";
-				saveSTL(fileName, geometry);
-				stl = STL.load(fileName);
-				Files.delete(Paths.get(fileName));
-				Files.delete(Paths.get(dirName));
-			}
+			String fileName = System.getProperty("java.io.tmpdir").replace('\\', '/')
+				+ "/tmpMinMax.stl";
+			saveSTL(fileName, geometry);
+			stl = STL.load(fileName);
+			Files.delete(Paths.get(fileName));
 		}
 		catch (IOException e)
 		{
