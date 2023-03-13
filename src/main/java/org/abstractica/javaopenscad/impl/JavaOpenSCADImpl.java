@@ -500,7 +500,7 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 		try
 		{
 			String fileName = System.getProperty("java.io.tmpdir").replace('\\', '/')
-				+ "/tmpMinMax.stl";
+				+ "tmpMinMax.stl";
 			saveSTL(fileName, geometry);
 			stl = STL.load(fileName);
 			Files.delete(Paths.get(fileName));
