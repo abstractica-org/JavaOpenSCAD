@@ -29,13 +29,13 @@
             <groupId>com.github.abstractica-org</groupId>
             <artifactId>CmdLine</artifactId>
             <!--suppress MavenModelInspection -->
-            <version>main-SNAPSHOT</version>
+            <version>v0.1.0</version>
         </dependency>
         <dependency>
             <groupId>com.github.abstractica-org</groupId>
             <artifactId>CodeBuilder</artifactId>
             <!--suppress MavenModelInspection -->
-            <version>main-SNAPSHOT</version>
+            <version>v0.1.0</version>
         </dependency>
     </dependencies>
 
