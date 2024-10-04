@@ -534,7 +534,7 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 		String prefix = fileName.substring(0, fileName.length() - 4);
 		String scadFileName = prefix + ".scad";
 		generateOpenSCADFile(scadFileName, geometry);
-		String cmd = "openscad --export-format binstl -o \"" + prefix + ".stl\" \"" + prefix + ".scad\"";
+		String cmd = "openscad --enable=manifold --export-format binstl -o \"" + prefix + ".stl\" \"" + prefix + ".scad\"";
 		int exitCode = CmdLine.runCommand(cmd);
 		if(deleteScadFile)
 		{
