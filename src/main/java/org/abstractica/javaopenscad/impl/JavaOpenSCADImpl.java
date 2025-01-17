@@ -431,7 +431,7 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 		{
 			Module3DImpl amod = (Module3DImpl) geometry;
 			AGeometry geo = amod.getGeometry();
-			if(geo instanceof LoadSTL3DImpl)
+			if(geo instanceof LoadFile3DImpl)
 			{
 				return geometry;
 			}
@@ -478,13 +478,27 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	{
 		Path path = Paths.get(fileName).toAbsolutePath();
 		String absoluteFileName = path.toString().replace("\\", "/");
-		return new LoadSTL3DImpl(absoluteFileName);
+		return new LoadFile3DImpl(absoluteFileName);
 	}
 
 	@Override
 	public void saveSTL(String fileName, OpenSCADGeometry3D geometry) throws IOException
 	{
 		saveSTL(fileName, geometry, true);
+	}
+
+	@Override
+	public OpenSCADGeometry3D load3MF(String fileName) throws IOException
+	{
+		Path path = Paths.get(fileName).toAbsolutePath();
+		String absoluteFileName = path.toString().replace("\\", "/");
+		return new LoadFile3DImpl(absoluteFileName);
+	}
+
+	@Override
+	public void save3MF(String fileName, OpenSCADGeometry3D geometry) throws IOException
+	{
+		save3MF(fileName, geometry, true);
 	}
 
 	private BoundingBox calculateBoundingBox(OpenSCADGeometry2D geometry)
@@ -535,6 +549,27 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 		String scadFileName = prefix + ".scad";
 		generateOpenSCADFile(scadFileName, geometry);
 		String cmd = "openscad --backend=manifold --export-format binstl -o \"" + prefix + ".stl\" \"" + prefix + ".scad\"";
+		int exitCode = CmdLine.runCommand(cmd);
+		if(deleteScadFile)
+		{
+			Files.delete(Paths.get(scadFileName));
+		}
+		if(exitCode != 0)
+		{
+			throw new RuntimeException("OpenSCAD failed with exit code " + exitCode);
+		}
+	}
+
+	private void save3MF(String fileName, OpenSCADGeometry3D geometry, boolean deleteScadFile) throws IOException
+	{
+		if(!fileName.endsWith(".3mf"))
+		{
+			throw new IllegalArgumentException("File name must end with .3mf");
+		}
+		String prefix = fileName.substring(0, fileName.length() - 4);
+		String scadFileName = prefix + ".scad";
+		generateOpenSCADFile(scadFileName, geometry);
+		String cmd = "openscad --backend=manifold --export-format 3mf -o \"" + prefix + ".3mf\" \"" + prefix + ".scad\"";
 		int exitCode = CmdLine.runCommand(cmd);
 		if(deleteScadFile)
 		{

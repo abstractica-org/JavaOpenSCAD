@@ -2,17 +2,14 @@ package org.abstractica.javaopenscad.tests;
 
 import org.abstractica.javaopenscad.JavaOpenSCAD;
 import org.abstractica.javaopenscad.impl.JavaOpenSCADImpl;
-import org.abstractica.javaopenscad.impl.core.identifier.AllStrings;
-import org.abstractica.javaopenscad.intf.OpenSCADGeometry2D;
 import org.abstractica.javaopenscad.intf.OpenSCADGeometry3D;
-import org.abstractica.javaopenscad.intf.OpenSCADVector2D;
 import org.abstractica.javaopenscad.intf.OpenSCADVector3D;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestPolyhedron3D
+public class Test3MF
 {
 	public static void main(String[] args) throws IOException
 	{
@@ -54,8 +51,9 @@ public class TestPolyhedron3D
 		faces.add(side4);
 
 		OpenSCADGeometry3D res = os.polyhedron3D(vertices, faces);
-		os.generateOpenSCADFile("OpenSCAD/output.scad", res);
-		os.saveSTL("OpenSCAD/output.3mf", res);
+		os.save3MF("OpenSCAD/output.3mf", res);
+		OpenSCADGeometry3D loaded = os.load3MF("OpenSCAD/output.3mf");
+		os.generateOpenSCADFile("OpenSCAD/output.scad", loaded);
 	}
 
 }

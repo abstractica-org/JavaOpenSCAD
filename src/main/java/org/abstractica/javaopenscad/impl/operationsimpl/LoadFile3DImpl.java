@@ -4,11 +4,11 @@ import org.abstractica.javaopenscad.impl.core.AGeometry3D;
 import org.abstractica.javaopenscad.impl.core.ArgumentCollector;
 import org.abstractica.code.codebuilder.CodeBuilder;
 
-public class LoadSTL3DImpl extends AGeometry3D
+public class LoadFile3DImpl extends AGeometry3D
 {
 	private final String fileName;
 
-	public LoadSTL3DImpl(String fileName)
+	public LoadFile3DImpl(String fileName)
 	{
 		this.fileName = fileName;
 	}
