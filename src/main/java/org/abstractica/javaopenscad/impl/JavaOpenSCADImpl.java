@@ -437,14 +437,14 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 			}
 		}
 		int geometryId = getId(geometry);
-		AGeometry res = (AGeometry) loadSTL(moduleCacheDirectoryName + "/M" + geometryId + ".stl");
+		AGeometry res = (AGeometry) load3MF(moduleCacheDirectoryName + "/M" + geometryId + ".3mf");
 		int loaderId = getId(res);
 		AGeometry geo = uniqueModules.get(loaderId);
 		if(geo == null)
 		{
-			geo = (AGeometry) res;
+			geo = res;
 			uniqueModules.put(loaderId, geo);
-			cacheSTL("M" + geometryId, geometry);
+			cache3MF("M" + geometryId, geometry);
 		}
 		return new Module3DImpl(geo, loaderId);
 	}
@@ -528,14 +528,14 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 		return new BoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
 	}
 
-	private void cacheSTL(String name, OpenSCADGeometry3D geometry) throws IOException
+	private void cache3MF(String name, OpenSCADGeometry3D geometry) throws IOException
 	{
 		String prefix = moduleCacheDirectoryName + "/" + name;
-		String stlFileName = prefix + ".stl";
+		String threeMFFileName = prefix + ".3mf";
 		String scadFileName = prefix + ".scad";
-		if(!Files.exists(Paths.get(stlFileName)) || !Files.exists(Paths.get(scadFileName)))
+		if(!Files.exists(Paths.get(threeMFFileName)) || !Files.exists(Paths.get(scadFileName)))
 		{
-			saveSTL(stlFileName, geometry, false);
+			save3MF(threeMFFileName, geometry, false);
 		}
 	}
 
