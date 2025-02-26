@@ -57,6 +57,18 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 		}
 	}
 
+	public JavaOpenSCADImpl(String cacheDirectory)
+	{
+		this.uniqueModules = new HashMap<>();
+		this.moduleCacheDirectoryName = cacheDirectory;
+		String allStringsFileName = moduleCacheDirectoryName + "/AllStrings/AllStrings.txt";
+		java.nio.file.Path path = Paths.get(allStringsFileName);
+		if(Files.exists(path))
+		{
+			AllStrings.readFromFile(allStringsFileName);
+		}
+	}
+
 	@Override
 	public OpenSCADVector2D vector2D(double x, double y)
 	{
