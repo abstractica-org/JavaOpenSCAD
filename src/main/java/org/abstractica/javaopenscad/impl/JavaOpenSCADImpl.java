@@ -195,12 +195,6 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	}
 
 	@Override
-	public OpenSCADGeometry2DFrom2D color2D(double r, double g, double b, double a)
-	{
-		return null;
-	}
-
-	@Override
 	public OpenSCADTextFont textFont(String fontName, String fontStyle, String language, String script)
 	{
 		return new TextFontImpl(fontName, fontStyle, language, script);

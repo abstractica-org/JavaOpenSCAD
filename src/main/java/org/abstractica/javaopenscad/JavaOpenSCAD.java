@@ -36,7 +36,6 @@ public interface JavaOpenSCAD
 	OpenSCADGeometry2DFrom2D minkowsky2D();
 	OpenSCADGeometry2DFrom2D offset2D(double delta, boolean chamfer);
 	OpenSCADGeometry2DFrom2D offsetRound2D(double radius, int angularResolution);
-	OpenSCADGeometry2DFrom2D color2D(double r, double g, double b, double a);
 
 	//Text
 	OpenSCADTextFont textFont(String fontName, String fontStyle, String language, String script);
