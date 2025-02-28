@@ -273,6 +273,18 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 	}
 
 	@Override
+	public OpenSCADGeometry3DFrom3D color3D(double r, double g, double b, double a)
+	{
+		return new Color3DImpl(r, g, b, a);
+	}
+
+	@Override
+	public OpenSCADGeometry3DFrom3D color3D(double r, double g, double b)
+	{
+		return color3D(r, g, b, 1);
+	}
+
+	@Override
 	public OpenSCADGeometry3DFrom3D translate3D(double x, double y, double z)
 	{
 		return new Translate3DImpl(x, y, z);

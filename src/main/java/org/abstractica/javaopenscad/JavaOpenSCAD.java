@@ -69,6 +69,8 @@ public interface JavaOpenSCAD
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 3D operations
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	OpenSCADGeometry3DFrom3D color3D(double r, double g, double b, double a);
+	OpenSCADGeometry3DFrom3D color3D(double r, double g, double b);
 	OpenSCADGeometry3DFrom3D translate3D(double x, double y, double z);
 	OpenSCADGeometry3DFrom3D rotate3D(double xDeg, double yDeg, double zDeg);
 	OpenSCADGeometry3DFrom3D scale3D(double x, double y, double z);
@@ -79,6 +81,7 @@ public interface JavaOpenSCAD
 	OpenSCADGeometry3DFrom3D difference3D();
 	OpenSCADGeometry3DFrom3D hull3D();
 	OpenSCADGeometry3DFrom3D minkowsky3D();
+
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 2D to 3D operations
