@@ -587,7 +587,7 @@ public class JavaOpenSCADImpl implements JavaOpenSCAD
 		String prefix = fileName.substring(0, fileName.length() - 4);
 		String scadFileName = prefix + ".scad";
 		generateOpenSCADFile(scadFileName, geometry);
-		String cmd = "openscad --backend=manifold --export-format 3mf -o \"" + prefix + ".3mf\" \"" + prefix + ".scad\"";
+		String cmd = "openscad --backend=manifold --export-format=3mf -O export-3mf/material-type=color -o \"" + prefix + ".3mf\" \"" + prefix + ".scad\"";
 		int exitCode = CmdLine.runCommand(cmd);
 		if(deleteScadFile)
 		{
